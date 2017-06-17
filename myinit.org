@@ -1,0 +1,222 @@
+#+STARTUP: overview
+* interface
+#+BEGIN_SRC emacs-lisp
+  (setq inhibit-startup-message t)
+  (fset #'yes-or-no-p 'y-or-n-p)
+
+  (menu-bar-mode 1)
+  (tool-bar-mode -1)
+  (scroll-bar-mode -1)
+
+  (use-package arjen-grey-theme
+    :ensure t
+    :config
+    (load-theme 'arjen-grey t))
+
+  (setq ring-bell-function
+        (lambda () nil))
+
+  (set-face-attribute 'region nil
+                      :background "#3c4447")
+#+END_SRC
+* auctex
+#+BEGIN_SRC emacs-lisp
+    (use-package auctex
+      :defer t
+      :ensure t
+      :config
+      (use-package company-auctex
+        :ensure t))
+#+END_SRC
+* company
+#+BEGIN_SRC emacs-lisp
+  (use-package company
+    :ensure t
+    :diminish 'company-mode
+    :config
+    (global-company-mode))
+#+END_SRC
+* Fun
+#+BEGIN_SRC emacs-lisp
+  (use-package chess
+    :ensure t)
+  (use-package zone
+    :config
+    (zone-when-idle 200))
+  (use-package xkcd
+    :ensure t)
+#+END_SRC
+* Magit
+#+BEGIN_SRC emacs-lisp
+    (use-package magit
+      :ensure t
+      :bind
+      ("C-x g" . magit-status))
+
+
+#+END_SRC
+* misc
+#+BEGIN_SRC emacs-lisp
+  (use-package expand-region
+    :ensure t
+    :bind
+    ("C-=" . er/expand-region))
+  (use-package rainbow-mode
+    :ensure t)
+  (use-package speed-type
+    :ensure t)
+#+END_SRC
+* org
+#+BEGIN_SRC emacs-lisp
+  (use-package org-bullets
+    :ensure t
+    :config
+    (add-hook 'org-mode-hook
+              (lambda ()
+                (org-bullets-mode t))))
+  (setq org-src-fontify-natively t)
+  (prettify-symbols-mode)
+#+END_SRC
+* Programming
+** c
+  #+BEGIN_SRC emacs-lisp
+    (setq c-default-style "user" c-basic-offset 2)
+  #+END_SRC
+** lisp
+  #+BEGIN_SRC emacs-lisp
+    (global-prettify-symbols-mode 1)
+
+    (use-package s
+      :ensure t)
+
+    (use-package paredit
+      :ensure t
+      :diminish paredit-mode
+      :config
+      (add-hook 'emacs-lisp-mode-hook       #'enable-paredit-mode)
+      (add-hook 'lisp-mode-hook             #'enable-paredit-mode)
+      (add-hook 'lisp-interaction-mode-hook #'enable-paredit-mode)
+      )
+
+    (use-package paredit-everywhere
+      :ensure t
+      :diminish paredit-everywhere-mode
+      :config
+      (add-hook 'prog-mode-hook #'paredit-everywhere-mode))
+
+    (use-package rainbow-delimiters
+      :ensure t
+      :config
+      (add-hook 'lisp-mode-hook
+                (lambda()
+                  (rainbow-delimiters-mode)
+                  ))
+      (add-hook 'emacs-lisp-mode-hook
+                (lambda()
+                  (rainbow-delimiters-mode)
+                  )))
+  #+END_SRC
+** Haskell
+  #+BEGIN_SRC emacs-lisp
+     (use-package haskell-mode
+       :ensure t)
+     (use-package company-ghci
+       :ensure t
+       :config (add-to-list 'company-backends 'company-ghci))
+   #+END_SRC
+** general
+   iedit
+   #+BEGIN_SRC emacs-lisp
+     (use-package iedit
+       :ensure t
+       :config
+       (set-face-attribute 'iedit-occurrence nil
+                           :background "#777777"
+                           :foreground "#262626"))
+   #+END_SRC
+   Fly check
+   #+BEGIN_SRC emacs-lisp
+     (use-package flycheck
+       :ensure t
+       :diminish 'flycheck-mode
+       :config
+       (setq flycheck-indication-mode nil)
+       (setq flycheck-idle-change-delay 1.5)
+       (add-hook 'prog-mode-hook (lambda () (flycheck-mode 1)))
+       (add-hook 'emacs-lisp-mode-hook (lambda () (flycheck-mode -1))))
+   #+END_SRC
+   Yasnippet
+   #+BEGIN_SRC emacs-lisp
+     (use-package yasnippet
+       :ensure t
+       :init
+       (add-hook 'prog-mode-hook 'yas-minor-mode)
+       :config
+       (yas-reload-all)
+       :diminish yas-minor-mode)
+   #+END_SRC
+* swiper/ivy
+#+BEGIN_SRC emacs-lisp
+  (use-package swiper
+    :ensure t
+    :diminish ivy-mode
+    :init
+    (use-package counsel
+      :ensure t
+      :bind
+      ("C-x C-f" . counsel-find-file)
+      ("M-y" . counsel-yank-pop)
+      ("M-x" . counsel-M-x)
+      ("<menu>" . counsel-M-x))
+    (ivy-mode 1)
+    (setq ivy-re-builders-alist
+          '((counsel-find-file . ivy--regex-fuzzy)
+           (t . ivy--regex-plus)))
+    :bind
+    ("C-s" . swiper)
+    ("C-r" . swiper))
+#+END_SRC
+* try
+#+BEGIN_SRC emacs-lisp
+  (use-package try
+    :ensure t)
+#+END_SRC
+* undo-tree
+#+BEGIN_SRC emacs-lisp
+  (use-package undo-tree
+    :ensure t
+    :config
+    (global-undo-tree-mode)
+    :diminish 'undo-tree-mode)
+#+END_SRC
+* Webkit
+#+BEGIN_SRC emacs-lisp
+
+  (add-hook 'window-configuration-change-hook (lambda ()
+               (when (equal major-mode 'xwidget-webkit-mode)
+                 (xwidget-webkit-adjust-size-dispatch))))
+
+  (add-hook 'xwidget-webkit-mode-hook (lambda()
+               (define-key xwidget-webkit-mode-map [mouse-4] 'xwidget-webkit-scroll-down)
+               (define-key xwidget-webkit-mode-map [mouse-5] 'xwidget-webkit-scroll-up)))
+
+  (defun google (str)
+    "google a string through webkit"
+    (interactive "sgoogle search: ")
+    (print str)
+    (setq query nil)
+    (dolist (word (split-string str) query)
+      (setq query (concat (concat query "+") word)))
+    (xwidget-webkit-browse-url (concat "https://google.com/search?q=" query))
+    )
+
+  (global-set-key (kbd "C-s-s") 'google)
+#+END_SRC
+* which key
+#+BEGIN_SRC emacs-lisp
+  (use-package which-key
+    :ensure t
+    :diminish which-key-mode
+    :config
+    (which-key-mode))
+#+END_SRC

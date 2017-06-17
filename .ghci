@@ -1,0 +1,16 @@
+:m + GOA
+:set editor vim
+
+setLambdabotHome "/home/joe/.cabal/bin"
+:def bs        lambdabot "botsnack"
+:def pl        lambdabot "pl"
+:def unpl      lambdabot "unpl"
+:def index     lambdabot "index"
+:def google    lambdabot "google"
+:def instances lambdabot "instances"
+:def source    lambdabot "learn"
+:def src       lambdabot "src"
+:def list      lambdabot "list"
+:def morelines lambdabot "more lines"
+
+:def hoogle \str -> return $ ":! hoogle --count=7 \"" ++ str ++ "\""
