@@ -137,7 +137,12 @@
       :ensure t)
     (use-package company-ghc
       :ensure t
-      :config (add-to-list 'company-backends 'company-ghc))
+      :config
+      (add-to-list 'company-backends '(company-ghc :with company-dabbrev-code))
+      (autoload 'ghc-init "ghc" nil t)
+      (autoload 'ghc-debug "ghc" nil t)
+      (add-hook 'haskell-mode-hook (lambda () (ghc-init)
+				     (flycheck-mode -1))))
     (use-package company-ghci
       :ensure t
       :config (add-to-list 'company-backends 'company-ghci))
