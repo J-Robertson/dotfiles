@@ -87,4 +87,4 @@ source $ZSH/oh-my-zsh.sh
 
 #initial command
 fortune | cowsay
-PATH=$PATH:/usr/local/texlive/2016/bin/x86_64-linux/:~/cabal/bin/
+PATH=$PATH:~/cabal/bin/
