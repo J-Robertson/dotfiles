@@ -25,7 +25,7 @@
    (quote
     (autojoin button completion fill irccontrols list match menu move-to-prompt netsplit networks noncommands readonly ring smiley stamp track)))
  '(erc-nick "Joe-R")
- '(erc-prompt-for-password t)
+ '(erc-prompt-for-password nil)
  '(global-company-mode t)
  '(hl-paren-colors
    (quote
