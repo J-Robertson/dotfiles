@@ -68,13 +68,6 @@
 #+END_SRC
 * org
 #+BEGIN_SRC emacs-lisp
-  (use-package org-plus-contrib
-    :ensure t)
-
-  (org-babel-do-load-languages
-   'org-babel-load-languages
-   '((python . t)))
-
   (use-package org-bullets
     :ensure t
     :config
@@ -87,6 +80,13 @@
 
   (use-package ox-reveal
     :ensure t)
+
+  (use-package org-plus-contrib
+    :ensure t)
+
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((python . t)))
 
   (setq org-reveal-root "http://cdn.jsdelivr.net/reveal.js/3.0.0/")
   (setq org-reveal-mathjax t)
