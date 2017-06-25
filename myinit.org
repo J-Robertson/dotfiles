@@ -4,6 +4,8 @@
   (setq inhibit-startup-message t)
   (fset #'yes-or-no-p 'y-or-n-p)
 
+  (global-set-key (kbd "<f5>") 'revert-buffer)
+
   (menu-bar-mode 1)
   (tool-bar-mode -1)
   (scroll-bar-mode -1)
@@ -14,10 +16,10 @@
     (load-theme 'arjen-grey t))
 
   (setq ring-bell-function
-        (lambda () nil))
+	(lambda () nil))
 
   (set-face-attribute 'region nil
-                      :background "#3c4447")
+		      :background "#3c4447")
 #+END_SRC
 * auctex
 #+BEGIN_SRC emacs-lisp
@@ -52,7 +54,6 @@
       :ensure t
       :bind
       ("C-x g" . magit-status))
-
 
 #+END_SRC
 * misc
@@ -140,15 +141,12 @@
     (use-package company-ghc
       :ensure t
       :config
-      (add-to-list 'company-backends '(company-ghc :with company-dabbrev-code))
       (autoload 'ghc-init "ghc" nil t)
       (autoload 'ghc-debug "ghc" nil t)
       (ghc-toggle-check-command)
+      (add-to-list 'company-backends '(company-ghc :with company-dabbrev-code))
       (add-hook 'haskell-mode-hook (lambda () (ghc-init)
 				     (flycheck-mode -1))))
-    (use-package company-ghci
-      :ensure t
-      :config (add-to-list 'company-backends 'company-ghci))
    #+END_SRC
 ** general
    iedit
@@ -170,6 +168,20 @@
        (setq flycheck-idle-change-delay 1.5)
        (add-hook 'prog-mode-hook (lambda () (flycheck-mode 1)))
        (add-hook 'emacs-lisp-mode-hook (lambda () (flycheck-mode -1))))
+   #+END_SRC
+   To prevent writing disgustingly long lines
+   #+BEGIN_SRC emacs-lisp
+     (use-package whitespace
+       :ensure t
+       :config
+       (setq whitespace-style '(face lines-tail))
+       (setq whitespace-line-column 80)
+       (global-whitespace-mode t)
+       :diminish 'global-whitespace-mode)
+   #+END_SRC
+   To delete trailing whitespace
+   #+BEGIN_SRC emacs-lisp
+     (add-hook 'before-save-hook 'delete-trailing-whitespace)
    #+END_SRC
 * swiper/ivy
 #+BEGIN_SRC emacs-lisp
