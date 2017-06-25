@@ -81,8 +81,10 @@
     (add-hook 'org-mode-hook
 	      (lambda ()
 		(org-bullets-mode t))))
+
   (setq org-src-fontify-natively t)
   (prettify-symbols-mode)
+
   (use-package ox-reveal
     :ensure t)
 
