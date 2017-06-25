@@ -169,16 +169,6 @@
        (add-hook 'prog-mode-hook (lambda () (flycheck-mode 1)))
        (add-hook 'emacs-lisp-mode-hook (lambda () (flycheck-mode -1))))
    #+END_SRC
-   Yasnippet
-   #+BEGIN_SRC emacs-lisp
-     (use-package yasnippet
-       :ensure t
-       :init
-       (add-hook 'prog-mode-hook 'yas-minor-mode)
-       :config
-       (yas-reload-all)
-       :diminish yas-minor-mode)
-   #+END_SRC
 * swiper/ivy
 #+BEGIN_SRC emacs-lisp
   (use-package swiper
