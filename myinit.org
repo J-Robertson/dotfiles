@@ -181,7 +181,6 @@
       :ensure t
       :bind
       ("C-x C-f" . counsel-find-file)
-      ("M-y" . counsel-yank-pop)
       ("M-x" . counsel-M-x)
       ("<menu>" . counsel-M-x))
     (ivy-mode 1)
