@@ -37,5 +37,4 @@ sepChar = "%",
 -- before this will be aligned left, everything after aligned right.
 alignSep = "}{",
 
-template = "%StdinReader% } <fc=#e6744c>%date%</fc> { %cpu% | %memory%"
-}
+template = "%StdinReader% } <fc=#e6744c>%date%</fc> { %cpu% | %memory%"}
