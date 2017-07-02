@@ -1,40 +1,14 @@
-Config {
--- Set font and default foreground/background colors. Note that
--- the height of xmobar is controlled by the font you use.
-font = "xft:Ubuntu Mono-8",
-bgColor = "black",
-fgColor = "grey",
-
-position = TopW L 100,
-
--- list of commands which gather information about your system for
--- presentation in the bar.
-commands = [
-	-- Gather and format CPU usage information.
-	-- If it's above 50%, we consider it high usage and make it red.
-	Run Cpu [
-	"-L", "3",
-	"-H", "50",
-	"--normal", "green",
-	"--high","red"
-	]
-	10,
-
-	-- Gather and format memory usage information
-	Run Memory [
-	"-t","Mem: <usedratio>%"
-	] 10,
-
-	-- Date formatting
-	--Run Date "%k:%M:%S" "date" 10,
-	Run DateZone "%a %d %b %Y - %H:%M:%S" "fr_FR.UTF-8" "UTC" "date" 10,
-	Run StdinReader
-],
-
--- Separator character used to wrape variables in the xmobar template
-sepChar = "%",
-
--- before this will be aligned left, everything after aligned right.
-alignSep = "}{",
-
-template = "%StdinReader% } <fc=#e6744c>%date%</fc> { %cpu% | %memory%"}
+Config { font = "xft:DejaVu Sans Mono-9",
+         bgColor = "#000000",
+         fgColor = "#dcdccc",
+         position = Top,
+         lowerOnStart = True,
+         commands = [ Run MultiCpu ["-t", "Cpu : <total0>% <total1>% <total2>% <total3>% (Total: <total>%)", "-L", "0", "-H", "50", "-n", "#60dc80" ,"-h", "#ec7373"] 10,
+                      Run Memory ["-t", "Mem: <usedratio>%"] 10,
+                      Run Date "%a %b %d %Y %H:%M:%S" "date" 10,
+		      Run Weather "EGBJ" ["-t"," <tempC>°C <skyCondition>","-L","10","-H","22","-n","#60dc80","-h","#ec7373"] 18000,
+                      Run StdinReader
+                      ],
+         sepChar = "%",
+         alignSep = "}{",
+         template = "%StdinReader% } <fc=#e6744c>%date%</fc> %EGBJ% {%multicpu% | %memory% "}
