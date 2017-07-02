@@ -238,13 +238,7 @@ myEventHook = mempty
 -- Perform an arbitrary action on each internal state change or X event.
 -- See the 'XMonad.Hooks.DynamicLog' extension for examples.
 --
-myLogHook = -- do
-  -- xmproc <- spawnPipe "/usr/bin/xmobar /home/joe/.xmobarrc"
-  -- dynamicLogWithPP xmobarPP
-  --   { ppOutput = hPutStrLn xmproc
-  --   , ppTitle = xmobarColor "green" "" . shorten 50
-  --   }
-  return ()
+myLogHook = return ()
 
 
 ------------------------------------------------------------------------
@@ -270,7 +264,7 @@ toggleStrutsKey XConfig {XMonad.modMask = modMask} = (modMask, xK_b)
 
 myPP =xmobarPP
       {
-        ppTitle = xmobarColor "green" "" . shorten 50
+        ppTitle = xmobarColor "#ec7373" "" . shorten 50
       }
 -- A structure containing your configuration settings, overriding
 -- fields in the default config. Any you don't override, will
