@@ -87,4 +87,3 @@ source $ZSH/oh-my-zsh.sh
 
 #initial command
 fortune | cowsay
-PATH=$PATH:~/cabal/bin/
