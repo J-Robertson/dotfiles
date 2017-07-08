@@ -262,7 +262,7 @@ myBar = "xmobar"
 
 toggleStrutsKey XConfig {XMonad.modMask = modMask} = (modMask, xK_b)
 
-myPP =xmobarPP
+myPP = xmobarPP
       {
         ppTitle = xmobarColor "#ec7373" "" . shorten 50
       }
