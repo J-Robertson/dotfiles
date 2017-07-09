@@ -252,11 +252,10 @@ myLogHook = return ()
 myStartupHook = return ()
 
 ------------------------------------------------------------------------
--- Now run xmonad with all the defaults we set up.
+-- Run xmonad with xmobar and with a command to stop screen turn off
 
--- Run xmonad with the settings you specify. No need to modify this.
---
-main = xmonad =<< statusBar myBar myPP toggleStrutsKey defaults
+main = spawn "xset -dpms" >>
+       statusBar myBar myPP toggleStrutsKey defaults >>= xmonad
 
 myBar = "xmobar"
 
