@@ -254,7 +254,7 @@ myStartupHook = return ()
 ------------------------------------------------------------------------
 -- Run xmonad with xmobar and with a command to stop screen turn off
 
-main = spawn "xset -dpms" >>
+main = spawn "xset -dpms && xset s off" >>
        statusBar myBar myPP toggleStrutsKey defaults >>= xmonad
 
 myBar = "xmobar"
