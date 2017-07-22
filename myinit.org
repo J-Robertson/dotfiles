@@ -173,7 +173,7 @@
        :config
        (setq whitespace-style '(face lines-tail))
        (setq whitespace-line-column 80)
-       (global-whitespace-mode t)
+       (add-hook  'prog-mode-hook (lambda () (whitespace-mode t)))
        :diminish 'global-whitespace-mode)
    #+END_SRC
    To delete trailing whitespace
