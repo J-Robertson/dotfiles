@@ -132,7 +132,10 @@ myKeys conf@XConfig {XMonad.modMask = modm} = M.fromList $
     , ((modm .|. shiftMask, xK_slash ), spawn ("echo \"" ++ help ++ "\" | xmessage -file -"))
 
     -- Run a screensaver
-    , ((modm .|. shiftMask, xK_z), spawn "slock")
+    , ((modm .|. shiftMask, xK_z     ), spawn "slock")
+
+    -- Start emacs
+    , ((modm              , xK_e), spawn "emacs")
     ]
 
     ++
@@ -144,15 +147,6 @@ myKeys conf@XConfig {XMonad.modMask = modm} = M.fromList $
     [((m .|. modm, k), windows $ f i)
         | (i, k) <- zip (XMonad.workspaces conf) [xK_1 .. xK_9]
         , (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]]
-    ++
-
-    --
-    -- mod-{w,e,r}, Switch to physical/Xinerama screens 1, 2, or 3
-    -- mod-shift-{w,e,r}, Move client to screen 1, 2, or 3
-    --
-    [((m .|. modm, key), screenWorkspace sc >>= flip whenJust (windows . f))
-        | (key, sc) <- zip [xK_w, xK_e, xK_r] [0..]
-        , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
 
 
 ------------------------------------------------------------------------
@@ -336,8 +330,6 @@ help = unlines ["The modifier key is 'super'. Default keybindings:",
     "",
     "-- Workspaces & screens",
     "mod-Shift-[1..9]   Move client to workspace N",
-    "mod-{w,e,r}        Switch to physical/Xinerama screens 1, 2, or 3",
-    "mod-Shift-{w,e,r}  Move client to screen 1, 2, or 3",
     "",
     "-- Mouse bindings: default actions bound to mouse events",
     "mod-button1  Set the window to floating mode and move by dragging",
@@ -348,4 +340,7 @@ help = unlines ["The modifier key is 'super'. Default keybindings:",
     "mod-b  Toggle appearence of statusbar",
     "",
     "-- lockscreen",
-    "mod-Shift-z  do lockscreen"]
+    "mod-Shift-z  do lockscreen",
+    "",
+    "-- Start emacs",
+    "mod-e Start emacs"]
