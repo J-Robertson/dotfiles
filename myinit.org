@@ -174,7 +174,7 @@
        (setq whitespace-style '(face lines-tail))
        (setq whitespace-line-column 80)
        (add-hook  'prog-mode-hook (lambda () (whitespace-mode t)))
-       :diminish 'global-whitespace-mode)
+       :diminish 'whitespace-mode)
    #+END_SRC
    To delete trailing whitespace
    #+BEGIN_SRC emacs-lisp
