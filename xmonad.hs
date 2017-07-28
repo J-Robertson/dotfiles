@@ -13,6 +13,7 @@ import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageHelpers
 import Data.Monoid
 import System.Exit
+import XMonad.Layout.ResizableTile
 
 import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
@@ -107,6 +108,12 @@ myKeys conf@XConfig {XMonad.modMask = modm} = M.fromList $
     -- Expand the master area
     , ((modm,               xK_l     ), sendMessage Expand)
 
+    -- Push borders up
+    , ((modm,               xK_i     ), sendMessage MirrorExpand)
+
+    -- push borders down
+    , ((modm,               xK_o     ), sendMessage MirrorShrink)
+
     -- Push window back into tiling
     , ((modm,               xK_t     ), withFocused $ windows . W.sink)
 
@@ -182,7 +189,7 @@ myMouseBindings XConfig {XMonad.modMask = modm} = M.fromList
 myLayout = tiled ||| Mirror tiled ||| Full
   where
      -- default tiling algorithm partitions the screen into two panes
-     tiled   = Tall nmaster delta ratio
+     tiled   = ResizableTall nmaster delta ratio []
 
      -- The default number of windows in the master pane
      nmaster = 1
@@ -315,6 +322,8 @@ help = unlines ["The modifier key is 'super'. Default keybindings:",
     "-- resizing the master/slave ratio",
     "mod-h  Shrink the master area",
     "mod-l  Expand the master area",
+    "mod-i  Push the borders up",
+    "mod-o  Push the borders down",
     "",
     "-- floating layer support",
     "mod-t  Push window back into tiling; unfloat and re-tile it",
