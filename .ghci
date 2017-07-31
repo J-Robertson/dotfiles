@@ -1,5 +1,6 @@
 :m + GOA
 :set editor vim
+:set prompt λ>
 
 setLambdabotHome "/home/joe/.cabal/bin"
 :def bs        lambdabot "botsnack"
