@@ -31,7 +31,7 @@
    (quote
     ("#B9F" "#B8D" "#B7B" "#B69" "#B57" "#B45" "#B33" "#B11")))
  '(org-bullets-bullet-list (quote ("◉")))
- '(package-selected-packages (quote (haskel-mode))))
+ '(package-selected-packages (quote (nhexl-mode haskel-mode))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
