@@ -240,6 +240,12 @@
 
   (global-set-key (kbd "C-s-s") 'google)
 #+END_SRC
+* pdf-tools
+ #+BEGIN_SRC emacs-lisp
+   (use-package pdf-tools
+     :ensure t
+     :config (pdf-tools-install))
+ #+END_SRC
 * which key
 #+BEGIN_SRC emacs-lisp
   (use-package which-key
