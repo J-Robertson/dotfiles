@@ -20,6 +20,7 @@
 
   (set-face-attribute 'region nil
 		      :background "#3c4447")
+  (global-unset-key (kbd "C-z"))
 #+END_SRC
 * auctex
 #+BEGIN_SRC emacs-lisp
