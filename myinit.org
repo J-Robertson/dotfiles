@@ -24,12 +24,18 @@
 #+END_SRC
 * auctex
 #+BEGIN_SRC emacs-lisp
-    (use-package auctex
-      :defer t
-      :ensure t
-      :config
-      (use-package company-auctex
-        :ensure t))
+  (use-package auctex
+    :defer t
+    :ensure t
+    :config
+    (use-package company-auctex
+      :ensure t))
+  (setq TeX-view-program-selection
+	'(((output-dvi has-no-display-manager) "dvi2tty")
+	  ((output-dvi style-pstricks) "dvips and gv")
+	  (output-dvi "xdvi")
+	  (output-pdf "PDF Tools")
+	  (output-html "xdg-open")))
 #+END_SRC
 * company
 #+BEGIN_SRC emacs-lisp
