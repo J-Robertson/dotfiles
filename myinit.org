@@ -173,16 +173,6 @@
        (add-hook 'prog-mode-hook (lambda () (flycheck-mode 1)))
        (add-hook 'emacs-lisp-mode-hook (lambda () (flycheck-mode -1))))
    #+END_SRC
-   To prevent writing disgustingly long lines
-   #+BEGIN_SRC emacs-lisp
-     (use-package whitespace
-       :ensure t
-       :config
-       (setq whitespace-style '(face lines-tail))
-       (setq whitespace-line-column 80)
-       (add-hook  'prog-mode-hook (lambda () (whitespace-mode t)))
-       :diminish 'whitespace-mode)
-   #+END_SRC
    To delete trailing whitespace
    #+BEGIN_SRC emacs-lisp
      (add-hook 'before-save-hook 'my-prog-nuke-trailing-whitespace)
