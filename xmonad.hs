@@ -8,10 +8,7 @@
 --
 
 import XMonad
-import XMonad.Util.Run
 import XMonad.Hooks.DynamicLog
-import XMonad.Hooks.ManageHelpers
-import Data.Monoid
 import System.Exit
 import XMonad.Layout.ResizableTile
 
