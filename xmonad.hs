@@ -257,7 +257,7 @@ main = spawn "xset -dpms && xset s off" >>
 
 myBar = "xmobar"
 
-toggleStrutsKey XConfig {XMonad.modMask = modMask} = (modMask, xK_b)
+toggleStrutsKey XConfig {XMonad.modMask = modm} = (modm, xK_b)
 
 myPP = xmobarPP
       {
