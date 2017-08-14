@@ -72,6 +72,7 @@
     :ensure t)
 #+END_SRC
 * org
+Visual stuff
 #+BEGIN_SRC emacs-lisp
   (use-package org-bullets
     :ensure t
@@ -82,22 +83,45 @@
 
   (setq org-src-fontify-natively t)
   (prettify-symbols-mode)
-
+#+END_SRC
+exporting stuff
+#+BEGIN_SRC emacs-lisp
+  ;; reveal.js exporting
   (use-package ox-reveal
     :ensure t)
 
   (use-package org-plus-contrib
     :ensure t)
 
-  (org-babel-do-load-languages
-   'org-babel-load-languages
-   '((python . t)))
-
   (setq org-reveal-root "http://cdn.jsdelivr.net/reveal.js/3.0.0/")
   (setq org-reveal-mathjax t)
 
   (use-package htmlize
     :ensure t)
+
+
+  ;; pdf exporting
+  (setq org-latex-listings 'minted
+	org-latex-packages-alist '(("" "minted"))
+	org-latex-pdf-process
+	'("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+	  "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
+
+#+END_SRC
+
+language stuff
+#+BEGIN_SRC emacs-lisp
+  ;; ipython notebook style files
+  (use-package ob-ipython
+    :ensure t
+    :config
+    (add-hook 'org-babel-after-execute-hook 'org-display-inline-images 'append))
+
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((python . t)
+     (ipython . t)))
+
 #+END_SRC
 * Programming
 ** c
