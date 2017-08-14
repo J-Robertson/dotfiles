@@ -147,7 +147,6 @@
       :config
       (autoload 'ghc-init "ghc" nil t)
       (autoload 'ghc-debug "ghc" nil t)
-      (ghc-toggle-check-command)
       (add-to-list 'company-backends '(company-ghc :with company-dabbrev-code))
       (add-hook 'haskell-mode-hook (lambda () (ghc-init)
 				     (flycheck-mode -1))))
