@@ -10,10 +10,11 @@
   (tool-bar-mode -1)
   (scroll-bar-mode -1)
 
-  (use-package arjen-grey-theme
-    :ensure t
-    :config
-    (load-theme 'arjen-grey t))
+  (unless (null window-system)
+    (use-package arjen-grey-theme
+      :ensure t
+      :config
+      (load-theme 'arjen-grey t)))
 
   (setq ring-bell-function
 	(lambda () nil))
