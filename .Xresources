@@ -8,10 +8,10 @@ XTerm.metaSendsEscape: true
 XTerm.vt100.scrollBar: false
 
 
-XTerm.vt100.faceName: DejaVu Sans Mono:pixelsize=13:foundry=PfEd:style=Book
+XTerm.vt100.faceName: DejaVu Sans Mono:pixelsize=14:foundry=PfEd:style=Book
 ! special
 *.foreground:   #ffffff
-*.background:   #181818
+*.background:   #101010
 *.cursorColor:  #ffffff
 
 ! black
