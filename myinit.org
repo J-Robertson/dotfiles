@@ -83,7 +83,6 @@ Visual stuff
 		(org-bullets-mode t))))
 
   (setq org-src-fontify-natively t)
-  (prettify-symbols-mode)
 #+END_SRC
 exporting stuff
 #+BEGIN_SRC emacs-lisp
