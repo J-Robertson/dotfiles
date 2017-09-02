@@ -199,7 +199,6 @@ language stuff
    To delete trailing whitespace
    #+BEGIN_SRC emacs-lisp
      (add-hook 'before-save-hook 'my-prog-nuke-trailing-whitespace)
-
      (defun my-prog-nuke-trailing-whitespace ()
        (when (derived-mode-p 'prog-mode)
 	 (delete-trailing-whitespace)))
