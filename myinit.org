@@ -51,7 +51,17 @@
   (use-package chess
     :ensure t)
   (use-package xkcd
-    :ensure t)
+    :ensure t
+    :config
+    (defun xkcd-rand-cache ()
+      "Show random xkcd."
+      (interactive)
+      (let* ((url "http://xkcd.com/info.0.json")
+	     (last (progn (xkcd-update-latest)
+			  xkcd-latest)))
+	(xkcd-get (random last))))
+    (define-key xkcd-mode-map (kbd "R") 'xkcd-rand-cache))
+
 #+END_SRC
 * Magit
 #+BEGIN_SRC emacs-lisp
