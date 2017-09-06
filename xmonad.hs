@@ -14,6 +14,8 @@ import XMonad.Layout.ResizableTile
 
 import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
+import XMonad.Hooks.ManageHelpers
+
 
 -- The preferred terminal program, which is used in a binding below and by
 -- certain contrib modules.
@@ -212,12 +214,13 @@ myLayout = tiled ||| Full
 -- To match on the WM_NAME, you can use 'title' in the same way that
 -- 'className' and 'resource' are used below.
 --
+myManageHook :: ManageHook
 myManageHook = composeAll
-    [ className =? "MPlayer"        --> doFloat
-    , className =? "Gimp"           --> doFloat
-    , resource  =? "desktop_window" --> doIgnore
-    , resource  =? "kdesktop"       --> doIgnore
-    , resource  =? "mupen64plus"    --> doFloat]
+    [ className =? "Gimp"           --> doFloat
+    , resource  =? "vlc"            --> doFloat
+    , isDialog                      --> doFloat
+    , isFullscreen                  --> doFloat]
+
 
 ------------------------------------------------------------------------
 -- Event handling
