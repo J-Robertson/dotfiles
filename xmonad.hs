@@ -15,6 +15,8 @@ import XMonad.Layout.ResizableTile
 import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
 import XMonad.Hooks.ManageHelpers
+import XMonad.Util.Cursor
+import XMonad.Layout.Tabbed
 
 
 -- The preferred terminal program, which is used in a binding below and by
@@ -241,7 +243,6 @@ myEventHook = mempty
 --
 myLogHook = return ()
 
-
 ------------------------------------------------------------------------
 -- Startup hook
 
@@ -250,21 +251,24 @@ myLogHook = return ()
 -- per-workspace layout choices.
 --
 -- By default, do nothing.
-myStartupHook = return ()
+myStartupHook = do
+  spawn "xset -dpms; xset s off"
+  setDefaultCursor xC_left_ptr
 
 ------------------------------------------------------------------------
 -- Run xmonad with xmobar and with a command to stop screen turn off
 
-main = spawn "xset -dpms && xset s off" >>
-       statusBar myBar myPP toggleStrutsKey defaults >>= xmonad
+main = statusBar myBar myPP toggleStrutsKey myConfig >>= xmonad
 
 myBar = "xmobar"
 
 toggleStrutsKey XConfig {XMonad.modMask = modm} = (modm, xK_b)
 
-myPP = xmobarPP
+myPP = def
       {
-        ppTitle = xmobarColor "#ec7373" "" . shorten 50
+        ppCurrent = xmobarColor "#60dc80" ""
+      , ppTitle   = xmobarColor "#ec7373" "" . shorten 80
+      , ppSep     = " | "
       }
 -- A structure containing your configuration settings, overriding
 -- fields in the default config. Any you don't override, will
@@ -272,8 +276,7 @@ myPP = xmobarPP
 --
 -- No need to modify this.
 --
-defaults = def {
-      -- simple stuff
+myConfig = def {
         terminal           = myTerminal,
         focusFollowsMouse  = myFocusFollowsMouse,
         clickJustFocuses   = myClickJustFocuses,
@@ -282,12 +285,8 @@ defaults = def {
         workspaces         = myWorkspaces,
         normalBorderColor  = myNormalBorderColor,
         focusedBorderColor = myFocusedBorderColor,
-
-      -- key bindings
         keys               = myKeys,
         mouseBindings      = myMouseBindings,
-
-      -- hooks, layouts
         layoutHook         = myLayout,
         manageHook         = myManageHook,
         handleEventHook    = myEventHook,
