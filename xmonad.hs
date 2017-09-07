@@ -17,7 +17,14 @@ import qualified Data.Map        as M
 import XMonad.Hooks.ManageHelpers
 import XMonad.Util.Cursor
 import XMonad.Layout.Tabbed
-
+import XMonad.Layout.Renamed
+import XMonad.Layout.NoFrillsDecoration
+import XMonad.Layout.Simplest
+import XMonad.Layout.SubLayouts
+import XMonad.Layout.WindowNavigation
+import XMonad.Layout.Accordion
+import XMonad.Actions.Navigation2D
+import XMonad.Layout.Spacing
 
 -- The preferred terminal program, which is used in a binding below and by
 -- certain contrib modules.
@@ -34,7 +41,7 @@ myClickJustFocuses = False
 
 -- Width of the window border in pixels.
 --
-myBorderWidth   = 1
+myBorderWidth   = 0
 
 -- modMask lets you specify which modkey you want to use. The default
 -- is mod1Mask ("left alt").  You may also consider using mod3Mask
@@ -83,31 +90,29 @@ myKeys conf@XConfig {XMonad.modMask = modm} = M.fromList $
     , ((modm,               xK_n     ), refresh)
 
     -- Move focus to the next window
-    , ((modm,               xK_Tab   ), windows W.focusDown)
+    , ((modm,               xK_Tab   ),  onGroup  W.focusDown')
 
-    -- Move focus to the next window
-    , ((modm,               xK_j     ), windows W.focusDown)
-
-    -- Move focus to the previous window
-    , ((modm,               xK_k     ), windows W.focusUp  )
+    , ((modm,               xK_j     ), windowGo D True)
+    , ((modm,               xK_k     ), windowGo U True)
+    , ((modm,               xK_h     ), windowGo L True)
+    , ((modm,               xK_l     ), windowGo R True)
 
     -- Move focus to the master window
     , ((modm,               xK_m     ), windows W.focusMaster  )
 
-    -- Swap the focused window and the master window
     , ((modm,               xK_Return), windows W.swapMaster)
+    , ((modm .|. shiftMask, xK_j     ), windowSwap D True)
+    , ((modm .|. shiftMask, xK_k     ), windowSwap U True)
+    , ((modm .|. shiftMask, xK_h     ), windowSwap L True)
+    , ((modm .|. shiftMask, xK_l     ), windowSwap R True)
 
-    -- Swap the focused window with the next window
-    , ((modm .|. shiftMask, xK_j     ), windows W.swapDown  )
-
-    -- Swap the focused window with the previous window
-    , ((modm .|. shiftMask, xK_k     ), windows W.swapUp    )
-
+    , ((modm, xK_equal), incSpacing 1)
+    , ((modm, xK_minus), incSpacing (-1))
     -- Shrink the master area
-    , ((modm,               xK_h     ), sendMessage Shrink)
+    , ((modm,               xK_bracketleft     ), sendMessage Shrink)
 
     -- Expand the master area
-    , ((modm,               xK_l     ), sendMessage Expand)
+    , ((modm,               xK_bracketright     ), sendMessage Expand)
 
     -- Push borders up
     , ((modm,               xK_i     ), sendMessage MirrorExpand)
@@ -129,6 +134,17 @@ myKeys conf@XConfig {XMonad.modMask = modm} = M.fromList $
     -- See also the statusBar function from Hooks.DynamicLog.
     --
     -- , ((modm              , xK_b     ), sendMessage ToggleStruts)
+    , ((modm .|. controlMask, xK_h), sendMessage $ pullGroup L)
+    , ((modm .|. controlMask, xK_l), sendMessage $ pullGroup R)
+    , ((modm .|. controlMask, xK_k), sendMessage $ pullGroup U)
+    , ((modm .|. controlMask, xK_j), sendMessage $ pullGroup D)
+
+    , ((modm .|. controlMask, xK_m), withFocused (sendMessage . MergeAll))
+    , ((modm .|. controlMask, xK_u), withFocused (sendMessage . UnMerge))
+    , ((modm .|. controlMask, xK_Tab), toSubl NextLayout)
+
+    , ((modm,               xK_Tab), onGroup W.focusUp')
+    , ((modm .|. shiftMask, xK_Tab), onGroup W.focusDown')
 
     -- Quit xmonad
     , ((modm .|. shiftMask, xK_q     ), io exitSuccess)
@@ -187,19 +203,50 @@ myMouseBindings XConfig {XMonad.modMask = modm} = M.fromList
 -- The available layouts.  Note that each layout is separated by |||,
 -- which denotes layout choice.
 --
-myLayout = tiled ||| Full
+
+myTopBarTheme :: Theme
+myTopBarTheme = def
+  { activeColor         = "#268bd2"
+  , inactiveColor       = "#073642"
+  , activeBorderColor   = "#268bd2"
+  , inactiveBorderColor = "#073642"
+  , activeTextColor     = "#268bd2"
+  , inactiveTextColor   = "#073642"
+  , decoHeight          = 10
+  }
+
+myTabTheme = def
+  { activeColor         = "#268bd2"
+  , inactiveColor       = "#073642"
+  , activeBorderColor   = "#268bd2"
+  , inactiveBorderColor = "#073642"
+  , fontName            = "xft: DejaVu Sans Mono-8"
+  , decoHeight          = 15
+  }
+
+
+myLayout = mainLayout ||| noBar ||| Full
   where
-     -- default tiling algorithm partitions the screen into two panes
-     tiled   = ResizableTall nmaster delta ratio []
+    mainLayout = named "Tabbed/Tall"
+                 $ windowNavigation
+                 $ noFrillsDeco shrinkText myTopBarTheme
+                 $ addTabs shrinkText myTabTheme
+                 $ subLayout [] (Simplest ||| Accordion)
+                 $ spacing 4
+                 $ ResizableTall nmaster delta ratio []
 
-     -- The default number of windows in the master pane
-     nmaster = 1
+    noBar      = named "noBar Tabbed/Tall"
+                 $ windowNavigation
+                 $ addTabs shrinkText myTabTheme
+                 $ subLayout [] (Simplest ||| Accordion)
+                 $ spacing 4
+                 $ ResizableTall nmaster delta ratio []
 
-     -- Default proportion of screen occupied by master pane
-     ratio   = 1/2
+    nmaster = 1
+    ratio   = 1/2
+    delta   = 3/100
+    named n = renamed [(XMonad.Layout.Renamed.Replace n)]
 
-     -- Percent of screen to increment by when resizing panes
-     delta   = 3/100
 
 ------------------------------------------------------------------------
 -- Window rules:
@@ -253,12 +300,15 @@ myLogHook = return ()
 -- By default, do nothing.
 myStartupHook = do
   spawn "xset -dpms; xset s off"
+  spawn "feh --bg-scale /usr/share/backgrounds/gnome/Dark_Ivy.jpg"
   setDefaultCursor xC_left_ptr
 
 ------------------------------------------------------------------------
 -- Run xmonad with xmobar and with a command to stop screen turn off
+myNavigation2DConfig = def { unmappedWindowRect = [("Full", singleWindowRect)]
+                           , defaultTiledNavigation = centerNavigation}
 
-main = statusBar myBar myPP toggleStrutsKey myConfig >>= xmonad
+main = statusBar myBar myPP toggleStrutsKey myConfig >>= xmonad . withNavigation2DConfig myNavigation2DConfig
 
 myBar = "xmobar"
 
@@ -283,8 +333,6 @@ myConfig = def {
         borderWidth        = myBorderWidth,
         modMask            = myModMask,
         workspaces         = myWorkspaces,
-        normalBorderColor  = myNormalBorderColor,
-        focusedBorderColor = myFocusedBorderColor,
         keys               = myKeys,
         mouseBindings      = myMouseBindings,
         layoutHook         = myLayout,
