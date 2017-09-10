@@ -25,10 +25,12 @@ import XMonad.Layout.WindowNavigation
 import XMonad.Layout.Accordion
 import XMonad.Actions.Navigation2D
 import XMonad.Layout.Spacing
+import Data.Monoid (All)
 
 -- The preferred terminal program, which is used in a binding below and by
 -- certain contrib modules.
 --
+myTerminal :: String
 myTerminal      = "xterm"
 
 -- Whether focus follows the mouse pointer.
@@ -41,6 +43,7 @@ myClickJustFocuses = False
 
 -- Width of the window border in pixels.
 --
+myBorderWidth :: Dimension
 myBorderWidth   = 0
 
 -- modMask lets you specify which modkey you want to use. The default
@@ -48,6 +51,7 @@ myBorderWidth   = 0
 -- ("right alt"), which does not conflict with emacs keybindings. The
 -- "windows key" is usually mod4Mask.
 --
+myModMask :: KeyMask
 myModMask       = mod4Mask
 
 -- The default number of workspaces (virtual screens) and their names.
@@ -59,16 +63,20 @@ myModMask       = mod4Mask
 --
 -- > workspaces = ["web", "irc", "code" ] ++ map show [4..9]
 --
+myWorkspaces :: [String]
 myWorkspaces    = ["1","2","3","4","5","6","7","8","9"]
 
 -- Border colors for unfocused and focused windows, respectively.
 --
+myNormalBorderColor :: String
+myFocusedBorderColor :: String
 myNormalBorderColor  = "#555555"
 myFocusedBorderColor = "#dddddd"
 
 ------------------------------------------------------------------------
 -- Key bindings. Add, modify or remove key bindings here.
 --
+myKeys :: XConfig Layout -> M.Map (KeyMask, KeySym) (X ())
 myKeys conf@XConfig {XMonad.modMask = modm} = M.fromList $
 
     -- launch a terminal
@@ -108,6 +116,7 @@ myKeys conf@XConfig {XMonad.modMask = modm} = M.fromList $
 
     , ((modm, xK_equal), incSpacing 1)
     , ((modm, xK_minus), incSpacing (-1))
+    , ((modm, xK_0    ), setSpacing 0)
     -- Shrink the master area
     , ((modm,               xK_bracketleft     ), sendMessage Shrink)
 
@@ -176,6 +185,7 @@ myKeys conf@XConfig {XMonad.modMask = modm} = M.fromList $
 ------------------------------------------------------------------------
 -- Mouse bindings: default actions bound to mouse events
 --
+myMouseBindings :: XConfig t -> M.Map (KeyMask, Button) (Window -> X ())
 myMouseBindings XConfig {XMonad.modMask = modm} = M.fromList
 
     -- mod-button1, Set the window to floating mode and move by dragging
@@ -215,6 +225,7 @@ myTopBarTheme = def
   , decoHeight          = 10
   }
 
+myTabTheme :: Theme
 myTabTheme = def
   { activeColor         = "#268bd2"
   , inactiveColor       = "#073642"
@@ -245,7 +256,7 @@ myLayout = mainLayout ||| noBar ||| Full
     nmaster = 1
     ratio   = 1/2
     delta   = 3/100
-    named n = renamed [(XMonad.Layout.Renamed.Replace n)]
+    named n = renamed [XMonad.Layout.Renamed.Replace n]
 
 
 ------------------------------------------------------------------------
@@ -280,6 +291,7 @@ myManageHook = composeAll
 -- return (All True) if the default handler is to be run afterwards. To
 -- combine event hooks use mappend or mconcat from Data.Monoid.
 --
+myEventHook :: Event -> X All
 myEventHook = mempty
 
 ------------------------------------------------------------------------
@@ -288,6 +300,7 @@ myEventHook = mempty
 -- Perform an arbitrary action on each internal state change or X event.
 -- See the 'XMonad.Hooks.DynamicLog' extension for examples.
 --
+myLogHook :: X ()
 myLogHook = return ()
 
 ------------------------------------------------------------------------
@@ -298,6 +311,7 @@ myLogHook = return ()
 -- per-workspace layout choices.
 --
 -- By default, do nothing.
+myStartupHook :: X ()
 myStartupHook = do
   spawn "xset -dpms; xset s off"
   spawn "feh --bg-scale /usr/share/backgrounds/gnome/Dark_Ivy.jpg"
@@ -305,15 +319,20 @@ myStartupHook = do
 
 ------------------------------------------------------------------------
 -- Run xmonad with xmobar and with a command to stop screen turn off
+myNavigation2DConfig :: Navigation2DConfig
 myNavigation2DConfig = def { unmappedWindowRect = [("Full", singleWindowRect)]
                            , defaultTiledNavigation = centerNavigation}
 
+main :: IO ()
 main = statusBar myBar myPP toggleStrutsKey myConfig >>= xmonad . withNavigation2DConfig myNavigation2DConfig
 
+myBar :: String
 myBar = "xmobar"
 
+toggleStrutsKey :: XConfig t -> (KeyMask, KeySym)
 toggleStrutsKey XConfig {XMonad.modMask = modm} = (modm, xK_b)
 
+myPP :: PP
 myPP = def
       {
         ppCurrent = xmobarColor "#60dc80" ""
@@ -331,6 +350,8 @@ myConfig = def {
         focusFollowsMouse  = myFocusFollowsMouse,
         clickJustFocuses   = myClickJustFocuses,
         borderWidth        = myBorderWidth,
+        normalBorderColor  = myNormalBorderColor,
+        focusedBorderColor = myFocusedBorderColor,
         modMask            = myModMask,
         workspaces         = myWorkspaces,
         keys               = myKeys,
