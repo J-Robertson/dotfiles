@@ -123,8 +123,7 @@ language stuff
 #+BEGIN_SRC emacs-lisp
   (org-babel-do-load-languages
    'org-babel-load-languages
-   '((python . t)
-     (ipython . t)))
+   '((python . t)))
 
 #+END_SRC
 * Programming
