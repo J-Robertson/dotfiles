@@ -121,12 +121,6 @@ exporting stuff
 
 language stuff
 #+BEGIN_SRC emacs-lisp
-  ;; ipython notebook style files
-  (use-package ob-ipython
-    :ensure t
-    :config
-    (add-hook 'org-babel-after-execute-hook 'org-display-inline-images 'append))
-
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((python . t)
