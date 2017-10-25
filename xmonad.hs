@@ -275,7 +275,7 @@ myLayout = mainLayout ||| noBar ||| Full
 -- 'className' and 'resource' are used below.
 --
 myManageHook :: ManageHook
-myManageHook = composeAll
+myManageHook = mconcat
     [ className =? "Gimp"           --> doFloat
     , resource  =? "vlc"            --> doFloat
     , isDialog                      --> doFloat
