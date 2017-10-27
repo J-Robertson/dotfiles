@@ -77,109 +77,55 @@ myFocusedBorderColor = "#dddddd"
 -- Key bindings. Add, modify or remove key bindings here.
 --
 myKeys :: XConfig Layout -> M.Map (KeyMask, KeySym) (X ())
-myKeys conf@XConfig {XMonad.modMask = modm} = M.fromList $
+myKeys = \conf -> mkKeymap conf $
+  [("M-S-<Return>", spawn $ terminal conf)
+  ,("M-p", spawn "dmenu_run")
+  ,("M-S-c", kill)
+  ,("M-<Space>", sendMessage NextLayout)
+  ,("M-S-<Space>", setLayout $ layoutHook conf)
+  ,("M-n", refresh)
+  ,("M-m", windows W.focusMaster)
+  ,("M-<Tab>", onGroup W.focusDown')
+  ,("M-j", windowGo D True)
+  ,("M-k", windowGo U True)
+  ,("M-h", windowGo L True)
+  ,("M-l", windowGo R True)
+  ,("M-<Return>", windows W.swapMaster)
+  ,("M-S-j", windowSwap D True)
+  ,("M-S-k", windowSwap U True)
+  ,("M-S-h", windowSwap L True)
+  ,("M-S-l", windowSwap R True)
+  ,("M-C-j", sendMessage $ pullGroup D)
+  ,("M-C-k", sendMessage $ pullGroup U)
+  ,("M-C-h", sendMessage $ pullGroup L)
+  ,("M-C-l", sendMessage $ pullGroup R)
+  ,("M-=", incSpacing 1)
+  ,("M--", incSpacing (-1))
+  ,("M-0", setSpacing 0)
+  ,("M-]", sendMessage Expand)
+  ,("M-[", sendMessage Shrink)
+  ,("M-t", withFocused $ windows . W.sink)
+  ,("M-,", sendMessage (IncMasterN 1))
+  ,("M-.", sendMessage (IncMasterN (-1)))
+  ,("M-S-q", io exitSuccess)
+  ,("M-q", spawn "xmonad --recompile; xmonad --restart")
+  ,("M-S-z", spawn "slock")
+  ,("M-e", spawn "emacs")
+  ,("M-y", fun)]
 
-    -- launch a terminal
-    [ ((modm .|. shiftMask, xK_Return), spawn $ XMonad.terminal conf)
+  ++
 
-    -- launch dmenu
-    , ((modm,               xK_p     ), spawn "dmenu_run")
+  [("M" ++ mask ++ tag, windows $ f tag)
+  | tag <- myWorkspaces, (f,mask) <- [(W.greedyView, "-"), (W.shift, "-S-")]]
 
-    -- close focused window
-    , ((modm .|. shiftMask, xK_c     ), kill)
 
-     -- Rotate through the available layout algorithms
-    , ((modm,               xK_space ), sendMessage NextLayout)
 
-    --  Reset the layouts on the current workspace to default
-    , ((modm .|. shiftMask, xK_space ), setLayout $ XMonad.layoutHook conf)
 
-    -- Resize viewed windows to the correct size
-    , ((modm,               xK_n     ), refresh)
 
-    -- Move focus to the next window
-    , ((modm,               xK_Tab   ),  onGroup  W.focusDown')
-
-    , ((modm,               xK_j     ), windowGo D True)
-    , ((modm,               xK_k     ), windowGo U True)
-    , ((modm,               xK_h     ), windowGo L True)
-    , ((modm,               xK_l     ), windowGo R True)
-
-    -- Move focus to the master window
-    , ((modm,               xK_m     ), windows W.focusMaster  )
-
-    , ((modm,               xK_Return), windows W.swapMaster)
-    , ((modm .|. shiftMask, xK_j     ), windowSwap D True)
-    , ((modm .|. shiftMask, xK_k     ), windowSwap U True)
-    , ((modm .|. shiftMask, xK_h     ), windowSwap L True)
-    , ((modm .|. shiftMask, xK_l     ), windowSwap R True)
-
-    , ((modm, xK_equal), incSpacing 1)
-    , ((modm, xK_minus), incSpacing (-1))
-    , ((modm, xK_0    ), setSpacing 0)
-    -- Shrink the master area
-    , ((modm,               xK_bracketleft     ), sendMessage Shrink)
-
-    -- Expand the master area
-    , ((modm,               xK_bracketright     ), sendMessage Expand)
-
-    -- Push borders up
-    , ((modm,               xK_i     ), sendMessage MirrorExpand)
-
-    -- push borders down
-    , ((modm,               xK_o     ), sendMessage MirrorShrink)
-
-    -- Push window back into tiling
-    , ((modm,               xK_t     ), withFocused $ windows . W.sink)
-
-    -- Increment the number of windows in the master area
-    , ((modm              , xK_comma ), sendMessage (IncMasterN 1))
-
-    -- Deincrement the number of windows in the master area
-    , ((modm              , xK_period), sendMessage (IncMasterN (-1)))
-
-    -- Toggle the status bar gap
-    -- Use this binding with avoidStruts from Hooks.ManageDocks.
-    -- See also the statusBar function from Hooks.DynamicLog.
-    --
-    -- , ((modm              , xK_b     ), sendMessage ToggleStruts)
-    , ((modm .|. controlMask, xK_h), sendMessage $ pullGroup L)
-    , ((modm .|. controlMask, xK_l), sendMessage $ pullGroup R)
-    , ((modm .|. controlMask, xK_k), sendMessage $ pullGroup U)
-    , ((modm .|. controlMask, xK_j), sendMessage $ pullGroup D)
-
-    , ((modm .|. controlMask, xK_m), withFocused (sendMessage . MergeAll))
-    , ((modm .|. controlMask, xK_u), withFocused (sendMessage . UnMerge))
-    , ((modm .|. controlMask, xK_Tab), toSubl NextLayout)
-
-    , ((modm,               xK_Tab), onGroup W.focusUp')
-    , ((modm .|. shiftMask, xK_Tab), onGroup W.focusDown')
-
-    -- Quit xmonad
-    , ((modm .|. shiftMask, xK_q     ), io exitSuccess)
-
-    -- Restart xmonad
-    , ((modm              , xK_q     ), spawn "xmonad --recompile; xmonad --restart")
-
-    -- Run xmessage with a summary of the default keybindings (useful for beginners)
-    , ((modm .|. shiftMask, xK_slash ), spawn ("echo \"" ++ help ++ "\" | xmessage -file -"))
-
-    -- Run a screensaver
-    , ((modm .|. shiftMask, xK_z     ), spawn "slock")
-
-    -- Start emacs
-    , ((modm              , xK_e), spawn "emacs")
-    ]
-
-    ++
-
-    --
-    -- mod-[1..9], Switch to workspace N
-    -- mod-shift-[1..9], Move client to workspace N
-    --
-    [((m .|. modm, k), windows $ f i)
-        | (i, k) <- zip (XMonad.workspaces conf) [xK_1 .. xK_9]
-        , (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]]
+fun :: X ()
+fun = do
+  XState {windowset = old} <- get
+  spawn ("echo \"" ++ (show (W.stack (W.workspace (W.current old)))) ++ "\" > test.out")
 
 
 ------------------------------------------------------------------------
