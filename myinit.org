@@ -30,13 +30,15 @@
     :ensure t
     :config
     (use-package company-auctex
-      :ensure t))
-  (setq TeX-view-program-selection
+      :ensure t
+      :config
+      (setq TeX-view-program-selection
 	'(((output-dvi has-no-display-manager) "dvi2tty")
 	  ((output-dvi style-pstricks) "dvips and gv")
 	  (output-dvi "xdvi")
 	  (output-pdf "PDF Tools")
-	  (output-html "xdg-open")))
+	  (output-html "xdg-open")))))
+
 #+END_SRC
 * company
 #+BEGIN_SRC emacs-lisp
@@ -266,7 +268,9 @@ language stuff
  #+BEGIN_SRC emacs-lisp
    (use-package pdf-tools
      :ensure t
-     :config (pdf-tools-install))
+     :config
+     (pdf-tools-install)
+     (define-key pdf-view-mode-map (kbd "C-s") 'isearch-forward))
  #+END_SRC
 * which key
 #+BEGIN_SRC emacs-lisp
