@@ -146,6 +146,7 @@ myStartupHook = do
   spawn "xset -dpms; xset s off"
   spawn "feh --bg-scale /usr/share/backgrounds/gnome/adwaita-night.jpg"
   spawn "xset r rate 300 40"
+  spawn "amixer -D pulse sset Master 80%"
   setDefaultCursor xC_left_ptr
 
 myNavigation2DConfig :: Navigation2DConfig
