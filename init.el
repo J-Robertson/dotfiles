@@ -1,13 +1,13 @@
 (require 'package)
 (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
-			 ("melpa" . "https://melpa.org/packages/")
-			 ("org" . "http://orgmode.org/elpa/")))
+			 ("melpa" . "https://melpa.org/packages/")))
 (package-initialize)
 (setq package-enable-at-startup nil)
 
-(unless (package-installed-p 'use-package)
-  (package-refresh-contents)
-  (package-install 'use-package))
+(mapcar (lambda (x) (unless (package-installed-p x)
+		      (package-refresh-contents)
+		      (package-install x)))
+	'(use-package diminish bind-key))
 
 (org-babel-load-file (expand-file-name "~/.emacs.d/myinit.org"))
 
