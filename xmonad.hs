@@ -131,7 +131,6 @@ myLayout = mainLayout ||| noBar ||| Full
 myManageHook :: ManageHook
 myManageHook = mconcat
     [ className =? "Gimp"           --> doFloat
-    , resource  =? "vlc"            --> doFloat
     , isDialog                      --> doFloat
     , isFullscreen                  --> doFloat]
 
