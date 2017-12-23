@@ -41,7 +41,7 @@ myNormalBorderColor  = "#555555"
 myFocusedBorderColor = "#dddddd"
 
 myKeys :: XConfig Layout -> M.Map (KeyMask, KeySym) (X ())
-myKeys = \conf -> mkKeymap conf $
+myKeys conf = mkKeymap conf $
   [("M-S-<Return>", spawn $ terminal conf)
   ,("M-p", spawn "dmenu_run")
   ,("M-S-c", kill)
