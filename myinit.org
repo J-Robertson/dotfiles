@@ -84,6 +84,11 @@
   (use-package speed-type
     :ensure t)
 #+END_SRC
+* cl
+  #+BEGIN_SRC emacs-lisp
+    (use-package cl
+      :ensure t)
+  #+END_SRC
 * org
 Visual stuff
 #+BEGIN_SRC emacs-lisp
@@ -176,6 +181,11 @@ language stuff
       (add-to-list 'company-backends '(company-ghc :with company-dabbrev-code))
       (add-hook 'haskell-mode-hook (lambda () (ghc-init)
 				     (flycheck-mode -1))))
+   #+END_SRC
+** apl
+   #+BEGIN_SRC emacs-lisp
+     (use-package gnu-apl-mode
+       :ensure t)
    #+END_SRC
 ** general
    iedit
