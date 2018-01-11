@@ -75,7 +75,8 @@ myKeys conf = mkKeymap conf $
   ,("M-S-q", io exitSuccess)
   ,("M-q", spawn "xmonad --recompile; xmonad --restart")
   ,("M-S-z", spawn "slock")
-  ,("M-e", spawn "emacs")]
+  ,("M-e", spawn "emacs")
+  ,("<XF86AudioMute>", spawn "amixer Master toggle")]
   ++
   [("M" ++ mask ++ tag, windows $ f tag)
   | tag <- myWorkspaces, (f,mask) <- [(W.greedyView, "-"), (W.shift, "-S-")]]
