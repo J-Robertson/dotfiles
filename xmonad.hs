@@ -18,7 +18,7 @@ import XMonad.Layout.Spacing
 import Data.Monoid (All)
 
 myTerminal :: String
-myTerminal      = "xterm"
+myTerminal = "xterm"
 
 myFocusFollowsMouse :: Bool
 myFocusFollowsMouse = True
@@ -27,13 +27,13 @@ myClickJustFocuses :: Bool
 myClickJustFocuses = False
 
 myBorderWidth :: Dimension
-myBorderWidth   = 0
+myBorderWidth = 0
 
 myModMask :: KeyMask
-myModMask       = mod4Mask
+myModMask = mod4Mask
 
 myWorkspaces :: [String]
-myWorkspaces    = ["1","2","3","4","5","6","7","8","9"]
+myWorkspaces = ["1","2","3","4","5","6","7","8","9"]
 
 myNormalBorderColor :: String
 myFocusedBorderColor :: String
