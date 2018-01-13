@@ -11,7 +11,7 @@ XTerm.vt100.scrollBar: false
 XTerm.vt100.faceName: DejaVu Sans Mono:pixelsize=13:foundry=PfEd:style=Book
 ! special
 *.foreground:   #ffffff
-*.background:   #101010
+*.background:   #000000
 *.cursorColor:  #ffffff
 
 ! black
