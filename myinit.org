@@ -92,12 +92,14 @@
 * org
 Visual stuff
 #+BEGIN_SRC emacs-lisp
+  (use-package org
+    :ensure t)
   (use-package org-bullets
     :ensure t
     :config
     (add-hook 'org-mode-hook
-	      (lambda ()
-		(org-bullets-mode t))))
+              (lambda ()
+                (org-bullets-mode t))))
 
   (setq org-src-fontify-natively t)
 #+END_SRC
