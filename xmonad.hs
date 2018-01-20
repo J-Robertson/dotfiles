@@ -74,7 +74,7 @@ myKeys conf = mkKeymap conf $
   ,("M-.", sendMessage (IncMasterN (-1)))
   ,("M-S-q", io exitSuccess)
   ,("M-q", spawn "xmonad --recompile; xmonad --restart")
-  ,("M-S-z", spawn "xset dpms force off; slock")
+  ,("M-S-z", spawn "sleep 0.1; xset dpms force off; slock; xset -dpms")
   ,("M-e", spawn "emacs")
   ,("<XF86AudioMute>", spawn "amixer set Master toggle")
   ,("<XF86AudioRaiseVolume>", spawn "amixer set Master 5%+")
