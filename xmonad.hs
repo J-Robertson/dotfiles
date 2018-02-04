@@ -72,15 +72,17 @@ myKeys conf = mkKeymap conf $
   ,("M-t", withFocused $ windows . W.sink)
   ,("M-,", sendMessage (IncMasterN 1))
   ,("M-.", sendMessage (IncMasterN (-1)))
-  ,("M-S-q", io exitSuccess)
+  ,("M-S-q", spawn "systemctl poweroff")
   ,("M-q", spawn "xmonad --recompile; xmonad --restart")
+  ,("M-r", spawn "systemctl reboot")
   ,("M-S-z", spawn "sleep 0.1; xset dpms force off; slock; xset -dpms")
+  ,("M-S-r", spawn "systemctl hibernate; slock")
   ,("M-e", spawn "emacs")
   ,("<XF86AudioMute>", spawn "amixer set Master toggle")
   ,("<XF86AudioRaiseVolume>", spawn "amixer set Master 5%+")
   ,("<XF86AudioLowerVolume>", spawn "amixer set Master 5%-")
-  ,("<XF86MonBrightnessDown>", spawn "brightlight -d 500")
-  ,("<XF86MonBrightnessUp>", spawn "brightlight -i 500")]
+  ,("<XF86MonBrightnessDown>", spawn "brightlight -d 479")
+  ,("<XF86MonBrightnessUp>", spawn "brightlight -i 479")]
   ++
   [("M" ++ mask ++ tag, windows $ f tag)
   | tag <- myWorkspaces, (f,mask) <- [(W.greedyView, "-"), (W.shift, "-S-")]]
