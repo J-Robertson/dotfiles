@@ -85,3 +85,4 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 unalias gp
+alias gnome-control-center="env XDG_CURRENT_DESKTOP=GNOME gnome-control-center"
