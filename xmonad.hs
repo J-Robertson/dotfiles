@@ -1,6 +1,5 @@
 import XMonad
 import XMonad.Hooks.DynamicLog
-import System.Exit
 import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
 import XMonad.Hooks.ManageHelpers
