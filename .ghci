@@ -1,9 +1,9 @@
 :m + GOA
 :set editor vim
 :set prompt λ>
-:set prompt2 λ|
+:set prompt-cont λ|
 
-setLambdabotHome "/home/joe/.cabal/bin"
+setLambdabotHome "/home/joe/.local/bin"
 :def bs        lambdabot "botsnack"
 :def pl        lambdabot "pl"
 :def unpl      lambdabot "unpl"
