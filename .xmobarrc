@@ -6,9 +6,12 @@ Config { font = "xft:DejaVu Sans Mono-9",
          commands = [ Run MultiCpu ["-t", "Cpu : <total0>% <total1>% <total2>% <total3>% (Total: <total>%)", "-L", "0", "-H", "50", "-n", "#60dc80" ,"-h", "#ec7373"] 10,
                       Run Memory ["-t", "Mem: <usedratio>%", "-H", "50", "-h", "#ec7373"] 10,
                       Run Date "%a %b %d %Y %H:%M:%S" "date" 10,
-		      Run Weather "EGBJ" ["-t"," <tempC>°C <skyCondition>","-L","10","-H","22","-n","#60dc80","-h","#ec7373"] 18000,
+                      Run Weather "EGBJ" ["-t"," <tempC>°C <skyCondition>","-L","10","-H","22","-n","#60dc80","-h","#ec7373"] 18000,
+                      Run Battery [
+		      "-t", "<acstatus>: <left>%", "--",
+		      "-O", "Charging","-o","Discharging","-i","Idle","-p", "#60dc80"] 50,
                       Run StdinReader
                       ],
          sepChar = "%",
          alignSep = "}{",
-         template = "%StdinReader% } <fc=#e6744c>%date%</fc> %EGBJ% {%multicpu% | %memory% "}
+         template = "%StdinReader% } <fc=#e6744c>%date%</fc> %EGBJ% {%battery% | %multicpu% | %memory% "}
