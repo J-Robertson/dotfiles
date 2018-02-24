@@ -3,7 +3,7 @@ XTerm.termname: xterm-256color
 ! allow UTF-8 encoding
 XTerm.vt100.locale: true
 ! ensure meta behaves properly
-XTerm.metaSendsEscape: true
+XTerm*metaSendsEscape: true
 ! cosmetic stuff
 XTerm.vt100.scrollBar: false
 
