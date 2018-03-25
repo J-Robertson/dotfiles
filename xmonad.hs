@@ -1,20 +1,28 @@
+{-# LANGUAGE FlexibleInstances, MultiParamTypeClasses #-}
+
+import Control.Arrow (second)
 import XMonad
 import XMonad.Hooks.DynamicLog
 import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
 import XMonad.Hooks.ManageHelpers
+import XMonad.Hooks.ManageDocks
 import XMonad.Util.Cursor
 import XMonad.Util.EZConfig
 import XMonad.Layout.Tabbed
 import XMonad.Layout.Renamed
-import XMonad.Layout.NoFrillsDecoration
 import XMonad.Layout.Simplest
 import XMonad.Layout.SubLayouts
+import XMonad.Layout.NoBorders
 import XMonad.Layout.WindowNavigation
-import XMonad.Layout.Accordion
 import XMonad.Actions.Navigation2D
 import XMonad.Layout.Spacing
+import System.Exit
 import Data.Monoid (All)
+import XMonad.Layout.LayoutModifier
+import XMonad.Util.Font (fi)
+import XMonad.Hooks.DynamicBars as Bars
+import XMonad.Util.Run
 
 myTerminal :: String
 myTerminal = "xterm"
@@ -26,7 +34,7 @@ myClickJustFocuses :: Bool
 myClickJustFocuses = False
 
 myBorderWidth :: Dimension
-myBorderWidth = 0
+myBorderWidth = 1
 
 myModMask :: KeyMask
 myModMask = mod4Mask
@@ -36,28 +44,36 @@ myWorkspaces = ["1","2","3","4","5","6","7","8","9"]
 
 myNormalBorderColor :: String
 myFocusedBorderColor :: String
-myNormalBorderColor  = "#555555"
-myFocusedBorderColor = "#dddddd"
+myNormalBorderColor  = "#333333"
+myFocusedBorderColor = "#ffffff"
 
 myKeys :: XConfig Layout -> M.Map (KeyMask, KeySym) (X ())
 myKeys conf = mkKeymap conf $
-  [("M-S-<Return>", spawn $ terminal conf)
+  [("M-b", sendMessage ToggleStruts)
+  ,("M-S-<Return>", spawn $ terminal conf)
   ,("M-p", spawn "dmenu_run")
   ,("M-S-c", kill)
   ,("M-<Space>", sendMessage NextLayout)
   ,("M-S-<Space>", setLayout $ layoutHook conf)
   ,("M-n", refresh)
-  ,("M-m", windows W.focusMaster)
   ,("M-<Tab>", onGroup W.focusDown')
-  ,("M-j", windowGo D True)
-  ,("M-k", windowGo U True)
-  ,("M-h", windowGo L True)
-  ,("M-l", windowGo R True)
+  -- ,("M-j", windowGo D True)
+  -- ,("M-k", windowGo U True)
+  -- ,("M-h", windowGo L True)
+  -- ,("M-l", windowGo R True)
+  ,("M-j", condX (sendMessage $ Go D) (windows W.focusDown))
+  ,("M-k", condX (sendMessage $ Go U) (windows W.focusUp))
+  ,("M-h", condX (sendMessage $ Go L) (windows W.focusDown))
+  ,("M-l", condX (sendMessage $ Go R) (windows W.focusUp))
   ,("M-<Return>", windows W.swapMaster)
-  ,("M-S-j", windowSwap D True)
-  ,("M-S-k", windowSwap U True)
-  ,("M-S-h", windowSwap L True)
-  ,("M-S-l", windowSwap R True)
+  -- ,("M-S-j", windowSwap D True)
+  -- ,("M-S-k", windowSwap U True)
+  -- ,("M-S-h", windowSwap L True)
+  -- ,("M-S-l", windowSwap R True)
+  ,("M-S-j", sendMessage $ Swap D)
+  ,("M-S-k", sendMessage $ Swap U)
+  ,("M-S-h", sendMessage $ Swap L)
+  ,("M-S-l", sendMessage $ Swap R)
   ,("M-C-j", sendMessage $ pullGroup D)
   ,("M-C-k", sendMessage $ pullGroup U)
   ,("M-C-h", sendMessage $ pullGroup L)
@@ -72,19 +88,42 @@ myKeys conf = mkKeymap conf $
   ,("M-,", sendMessage (IncMasterN 1))
   ,("M-.", sendMessage (IncMasterN (-1)))
   ,("M-S-q", spawn "systemctl poweroff")
-  ,("M-q", spawn "xmonad --recompile; xmonad --restart")
+  ,("M-q", spawn "rm .xmonad/xmonad.state; stack exec xmonad -- --recompile; stack exec xmonad -- --restart")
   ,("M-r", spawn "systemctl reboot")
   ,("M-S-z", spawn "sleep 0.1; xset dpms force off; slock; xset -dpms")
   ,("M-S-r", spawn "systemctl hibernate; slock")
+  ,("M-x", io exitSuccess)
   ,("M-e", spawn "emacs")
-  ,("<XF86AudioMute>", spawn "amixer set Master toggle")
-  ,("<XF86AudioRaiseVolume>", spawn "amixer set Master 5%+")
-  ,("<XF86AudioLowerVolume>", spawn "amixer set Master 5%-")
-  ,("<XF86MonBrightnessDown>", spawn "brightlight -d 479")
-  ,("<XF86MonBrightnessUp>", spawn "brightlight -i 479")]
+  ,("M-w", spawn "firefox")
+  ,("<XF86AudioMute>", spawn "pamixer -t")
+  ,("<XF86AudioRaiseVolume>", spawn "pamixer -i 5")
+  ,("<XF86AudioLowerVolume>", spawn "pamixer -d 5")
+  ,("<XF86MonBrightnessDown>", spawn "xbacklight -dec 5")
+  ,("<XF86MonBrightnessUp>", spawn "xbacklight -inc 5")
+  ,("<XF86AudioMicMute>", spawn "pactl set-source-mute 1 toggle")
+  ,("M-m", withFocused f)]
   ++
   [("M" ++ mask ++ tag, windows $ f tag)
   | tag <- myWorkspaces, (f,mask) <- [(W.greedyView, "-"), (W.shift, "-S-")]]
+  ++
+  [("M" ++ mask ++ key, screenWorkspace sc >>= flip whenJust (windows . f))
+  | (key,sc) <- zip ["s","d","f"] [0..], (f,mask) <- [(W.view, "-"), (W.shift, "-S-")]]
+
+condX :: X () -> X () -> X ()
+condX f g = do
+  l  <- (description . W.layout . W.workspace . W.current) <$> gets windowset
+  if l/="Full"
+    then f
+    else g
+
+
+f :: Window -> X ()
+f w = do
+  cn <- runQuery className w
+  spawn $ "pactl set-sink-input-mute $(pactl list sink-inputs | grep --before-context=25 -i \"" ++ cn ++ "\" | grep \"Sink Input\" | awk -F '#' '{print $2}') toggle"
+  -- title <- runQuery title w
+  -- spawn $ "pactl set-sink-input-mute $(pactl list sink-inputs | grep --before-context=25 -i \"" ++ title ++ "\" | grep \"Sink Input\" | awk -F '#' '{print $2}') toggle"
+
 
 myMouseBindings :: XConfig t -> M.Map (KeyMask, Button) (Window -> X ())
 myMouseBindings XConfig {XMonad.modMask = modm} = M.fromList
@@ -109,25 +148,30 @@ myTabTheme = def
   , activeBorderColor   = "#268bd2"
   , inactiveBorderColor = "#073642"
   , fontName            = "xft: DejaVu Sans Mono-8"
-  , decoHeight          = 15
+  , decoHeight          = 13
   }
 
-myLayout = mainLayout ||| noBar ||| Full
+myLayout = windowNavigation $ smartBorders mainLayout ||| topBar ||| noBorders Full
   where
-    mainLayout = named "Tabbed/Tall"
-                 $ windowNavigation
-                 $ noFrillsDeco shrinkText myTopBarTheme
+    topBar = named "Tabbed/Tall"
+             $ noBorders
+             $ addTabsAlways shrinkText myTabTheme
+             $ subLayout [] Simplest
+             $ ss 4
+             $ Tall nmaster delta ratio
+
+    -- noBar      = named "noBar Tabbed/Tall"
+    --              $ windowNavigation
+    --              $ addTabs shrinkText myTabTheme
+    --              $ subLayout [] Simplest
+    --              $ ss 0
+    --              $ Tall nmaster delta ratio
+
+    mainLayout = named "Tall"
                  $ addTabs shrinkText myTabTheme
-                 $ subLayout [] (Simplest ||| Accordion)
-                 $ spacing 4
+                 $ subLayout [] Simplest
                  $ Tall nmaster delta ratio
 
-    noBar      = named "noBar Tabbed/Tall"
-                 $ windowNavigation
-                 $ addTabs shrinkText myTabTheme
-                 $ subLayout [] (Simplest ||| Accordion)
-                 $ spacing 4
-                 $ Tall nmaster delta ratio
 
     nmaster = 1
     ratio   = 1/2
@@ -141,31 +185,10 @@ myManageHook = mconcat
     , isFullscreen                  --> doFloat]
 
 myEventHook :: Event -> X All
-myEventHook = mempty
+myEventHook = Bars.dynStatusBarEventHook xmobarCreator xmobarDestroyer
 
 myLogHook :: X ()
-myLogHook = return ()
-
-myStartupHook :: X ()
-myStartupHook = do
-  spawn "xset -dpms; xset s off"
-  spawn "feh --bg-scale /usr/share/backgrounds/fedora-workstation/aurora-over-iceland.png"
-  spawn "xset r rate 300 40"
-  setDefaultCursor xC_left_ptr
-
-myNavigation2DConfig :: Navigation2DConfig
-myNavigation2DConfig = def { unmappedWindowRect = [("Full", singleWindowRect)]
-                           , defaultTiledNavigation = centerNavigation}
-
-main :: IO ()
-main = statusBar myBar myPP toggleStrutsKey myConfig
-       >>= xmonad . withNavigation2DConfig myNavigation2DConfig
-
-myBar :: String
-myBar = "xmobar"
-
-toggleStrutsKey :: XConfig t -> (KeyMask, KeySym)
-toggleStrutsKey XConfig {XMonad.modMask = modm} = (modm, xK_b)
+myLogHook = Bars.multiPP myPP (myPP {ppCurrent = xmobarColor "#ec7373" ""})
 
 myPP :: PP
 myPP = def
@@ -174,6 +197,48 @@ myPP = def
       , ppTitle   = xmobarColor "#ec7373" "" . shorten 80
       , ppSep     = " | "
       }
+
+myStartupHook :: X ()
+myStartupHook = do
+  spawn "xrandr --auto"
+  spawn "~/dotfiles/monitorscript.sh"
+  spawn "xset -dpms; xset s off"
+  spawn "xrdb ~/.Xresources"
+  spawn "feh --bg-scale ~/Downloads/desktop.png"
+  spawn "xset r rate 300 40"
+  setDefaultCursor xC_left_ptr
+  Bars.dynStatusBarStartup xmobarCreator xmobarDestroyer
+
+xmobarCreator :: Bars.DynamicStatusBar
+xmobarCreator (S sid) = spawnPipe $ "xmobar --screen " ++ show sid
+
+xmobarDestroyer :: Bars.DynamicStatusBarCleanup
+xmobarDestroyer = return ()
+
+myNavigation2DConfig :: Navigation2DConfig
+myNavigation2DConfig = def { unmappedWindowRect = [("Full", singleWindowRect)]
+                           , defaultTiledNavigation = centerNavigation}
+
+-- main :: IO ()
+-- main = statusBar myBar myPP toggleStrutsKey myConfig
+--        >>= xmonad . withNavigation2DConfig myNavigation2DConfig
+main :: IO ()
+main = xmonad . docks $ myConfig
+
+
+myBar :: String
+myBar = "xmobar"
+
+toggleStrutsKey :: XConfig t -> (KeyMask, KeySym)
+toggleStrutsKey XConfig {XMonad.modMask = modm} = (modm, xK_b)
+
+-- myPP :: PP
+-- myPP = def
+--       {
+--         ppCurrent = xmobarColor "#60dc80" ""
+--       , ppTitle   = xmobarColor "#ec7373" "" . shorten 80
+--       , ppSep     = " | "
+--       }
 
 myConfig = def {
         terminal           = myTerminal,
@@ -186,9 +251,25 @@ myConfig = def {
         workspaces         = myWorkspaces,
         keys               = myKeys,
         mouseBindings      = myMouseBindings,
-        layoutHook         = myLayout,
+        layoutHook         = avoidStruts myLayout,
         manageHook         = myManageHook,
         handleEventHook    = myEventHook,
         logHook            = myLogHook,
         startupHook        = myStartupHook
     }
+
+newtype SS a = SS Int deriving (Show,Read)
+
+ss :: Int -> l a -> ModifiedLayout SS l a
+ss = ModifiedLayout . SS
+
+instance LayoutModifier SS a where
+  pureModifier _ _ _ [x] = ([x], Nothing)
+  pureModifier (SS p) _ _ wrs = (map (second $ shrinkRect p) wrs, Nothing)
+  pureMess (SS px) m
+    | Just (ModifySpacing f) <- fromMessage m = Just $ SS $ max 0 $ f px
+    | otherwise = Nothing
+  modifierDescription (SS p) = "SmartSpacing " ++ show p
+
+shrinkRect :: Int -> Rectangle -> Rectangle
+shrinkRect p (Rectangle x y w h) = Rectangle (x+fi p) (y+fi p) (fi $ max 1 $ fi w-2*p) (fi $ max 1 $ fi h-2*p)
