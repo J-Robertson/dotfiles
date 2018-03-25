@@ -22,23 +22,22 @@
   (set-face-attribute 'region nil
 		      :background "#3c4447")
   (global-unset-key (kbd "C-z"))
+  (setq-default indent-tabs-mode nil)
 #+END_SRC
 * auctex
 #+BEGIN_SRC emacs-lisp
   (use-package auctex
     :defer t
     :ensure t
-    :config
+    :init
     (use-package company-auctex
-      :ensure t
-      :config
-      (setq TeX-view-program-selection
-	'(((output-dvi has-no-display-manager) "dvi2tty")
-	  ((output-dvi style-pstricks) "dvips and gv")
-	  (output-dvi "xdvi")
-	  (output-pdf "PDF Tools")
-	  (output-html "xdg-open")))))
-
+      :ensure t)
+    (setq TeX-view-program-selection
+	  '(((output-dvi has-no-display-manager) "dvi2tty")
+	    ((output-dvi style-pstricks) "dvips and gv")
+	    (output-dvi "xdvi")
+	    (output-pdf "PDF Tools")
+	    (output-html "xdg-open"))))
 #+END_SRC
 * company
 #+BEGIN_SRC emacs-lisp
@@ -151,7 +150,7 @@ language stuff
       (add-hook 'emacs-lisp-mode-hook       #'enable-paredit-mode)
       (add-hook 'lisp-mode-hook             #'enable-paredit-mode)
       (add-hook 'lisp-interaction-mode-hook #'enable-paredit-mode)
-      )
+      (add-hook 'slime-repl-mode-hook       #'enable-paredit-mode))
 
     (use-package paredit-everywhere
       :ensure t
@@ -162,27 +161,28 @@ language stuff
     (use-package rainbow-delimiters
       :ensure t
       :config
-      (add-hook 'lisp-mode-hook
-                (lambda()
-                  (rainbow-delimiters-mode)
-                  ))
-      (add-hook 'emacs-lisp-mode-hook
-                (lambda()
-                  (rainbow-delimiters-mode)
-                  )))
+      (add-hook 'lisp-mode-hook       #'rainbow-delimiters-mode)
+      (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
+      (add-hook 'slime-repl-mode-hook #'rainbow-delimiters-mode))
+
+    (use-package slime
+      :ensure t
+      :config
+      (setq inferior-lisp-program "/bin/sbcl")
+      (setq slime-contribs '(slime-fancy)))
   #+END_SRC
 ** Haskell
   #+BEGIN_SRC emacs-lisp
     (use-package haskell-mode
       :ensure t)
-    (use-package company-ghc
-      :ensure t
-      :config
-      (autoload 'ghc-init "ghc" nil t)
-      (autoload 'ghc-debug "ghc" nil t)
-      (add-to-list 'company-backends '(company-ghc :with company-dabbrev-code))
-      (add-hook 'haskell-mode-hook (lambda () (ghc-init)
-				     (flycheck-mode -1))))
+    ;; (use-package company-ghc
+    ;;   :ensure t
+    ;;   :config
+    ;;   (autoload 'ghc-init "ghc" nil t)
+    ;;   (autoload 'ghc-debug "ghc" nil t)
+    ;;   (add-to-list 'company-backends '(company-ghc :with company-dabbrev-code))
+    ;;   (add-hook 'haskell-mode-hook (lambda () (ghc-init)
+    ;; 				 (flycheck-mode -1))))
    #+END_SRC
 ** apl
    #+BEGIN_SRC emacs-lisp
@@ -231,8 +231,8 @@ language stuff
       ("<menu>" . counsel-M-x))
     (ivy-mode 1)
     (setq ivy-re-builders-alist
-          '((counsel-find-file . ivy--regex-fuzzy)
-           (t . ivy--regex-plus)))
+	  '((counsel-find-file . ivy--regex-fuzzy)
+	   (t . ivy--regex-plus)))
     :bind
     ("C-s" . swiper)
     ("C-r" . swiper))
@@ -250,29 +250,6 @@ language stuff
     (global-undo-tree-mode)
     :diminish 'undo-tree-mode)
 #+END_SRC
-* Webkit
-#+BEGIN_SRC emacs-lisp
-
-  (add-hook 'window-configuration-change-hook (lambda ()
-               (when (equal major-mode 'xwidget-webkit-mode)
-                 (xwidget-webkit-adjust-size-dispatch))))
-
-  (add-hook 'xwidget-webkit-mode-hook (lambda()
-               (define-key xwidget-webkit-mode-map [mouse-4] 'xwidget-webkit-scroll-down)
-               (define-key xwidget-webkit-mode-map [mouse-5] 'xwidget-webkit-scroll-up)))
-
-  (defun google (str)
-    "google a string through webkit"
-    (interactive "sgoogle search: ")
-    (print str)
-    (setq query nil)
-    (dolist (word (split-string str) query)
-      (setq query (concat (concat query "+") word)))
-    (xwidget-webkit-browse-url (concat "https://google.com/search?q=" query))
-    )
-
-  (global-set-key (kbd "C-s-s") 'google)
-#+END_SRC
 * pdf-tools
  #+BEGIN_SRC emacs-lisp
    (use-package pdf-tools
@@ -281,11 +258,3 @@ language stuff
      (pdf-tools-install)
      (define-key pdf-view-mode-map (kbd "C-s") 'isearch-forward))
  #+END_SRC
-* which key
-#+BEGIN_SRC emacs-lisp
-  (use-package which-key
-    :ensure t
-    :diminish which-key-mode
-    :config
-    (which-key-mode))
-#+END_SRC
