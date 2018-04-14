@@ -15,3 +15,5 @@ setLambdabotHome "/home/joe/.local/bin"
 :def morelines lambdabot "more lines"
 
 :def hoogle \str -> return $ ":! hoogle --count=7 \"" ++ str ++ "\""
+:def pretty \_ -> return ":m + Text.Show.Pretty Language.Haskell.HsColour Language.Haskell.HsColour.Colourise\ncolourPrint = putStrLn . hscolour TTY defaultColourPrefs False False \"\" False . ppShow\n:set -interactive-print colourPrint"
+:def noPretty \_ -> return ":set -interactive-print print"
