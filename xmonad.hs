@@ -15,7 +15,6 @@ import XMonad.Layout.Simplest
 import XMonad.Layout.SubLayouts
 import XMonad.Layout.NoBorders
 import XMonad.Layout.WindowNavigation
-import XMonad.Actions.Navigation2D
 import XMonad.Layout.Spacing
 import System.Exit
 import Data.Monoid (All)
@@ -88,7 +87,7 @@ myKeys conf = mkKeymap conf $
   ,("M-,", sendMessage (IncMasterN 1))
   ,("M-.", sendMessage (IncMasterN (-1)))
   ,("M-S-q", spawn "systemctl poweroff")
-  ,("M-q", spawn "rm .xmonad/xmonad.state; stack exec xmonad -- --recompile; stack exec xmonad -- --restart")
+  ,("M-q", spawn "rm .xmonad/xmonad.state; xmonad --recompile; xmonad --restart")
   ,("M-r", spawn "systemctl reboot")
   ,("M-S-z", spawn "sleep 0.1; xset dpms force off; slock; xset -dpms")
   ,("M-S-r", spawn "systemctl hibernate; slock")
@@ -210,35 +209,13 @@ myStartupHook = do
   Bars.dynStatusBarStartup xmobarCreator xmobarDestroyer
 
 xmobarCreator :: Bars.DynamicStatusBar
-xmobarCreator (S sid) = spawnPipe $ "xmobar --screen " ++ show sid
+xmobarCreator (S sid) = spawnPipe $ "xmobar -x " ++ show sid
 
 xmobarDestroyer :: Bars.DynamicStatusBarCleanup
 xmobarDestroyer = return ()
 
-myNavigation2DConfig :: Navigation2DConfig
-myNavigation2DConfig = def { unmappedWindowRect = [("Full", singleWindowRect)]
-                           , defaultTiledNavigation = centerNavigation}
-
--- main :: IO ()
--- main = statusBar myBar myPP toggleStrutsKey myConfig
---        >>= xmonad . withNavigation2DConfig myNavigation2DConfig
 main :: IO ()
 main = xmonad . docks $ myConfig
-
-
-myBar :: String
-myBar = "xmobar"
-
-toggleStrutsKey :: XConfig t -> (KeyMask, KeySym)
-toggleStrutsKey XConfig {XMonad.modMask = modm} = (modm, xK_b)
-
--- myPP :: PP
--- myPP = def
---       {
---         ppCurrent = xmobarColor "#60dc80" ""
---       , ppTitle   = xmobarColor "#ec7373" "" . shorten 80
---       , ppSep     = " | "
---       }
 
 myConfig = def {
         terminal           = myTerminal,
