@@ -174,7 +174,17 @@ language stuff
 ** Haskell
   #+BEGIN_SRC emacs-lisp
     (use-package haskell-mode
-      :ensure t)
+      :ensure t
+      :config
+      (add-hook 'haskell-mode-hook #'interactive-haskell-mode))
+    (use-package hindent
+      :ensure t
+      :config
+      (add-hook 'haskell-mode-hook #'hindent-mode))
+    (use-package company-ghci
+      :ensure t
+      :config
+      (add-to-list 'company-backends 'company-ghci))
     ;; (use-package company-ghc
     ;;   :ensure t
     ;;   :config
