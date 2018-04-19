@@ -93,7 +93,7 @@ myKeys conf = mkKeymap conf $
   ,("M-S-r", spawn "systemctl hibernate; slock")
   ,("M-x", io exitSuccess)
   ,("M-e", spawn "emacs")
-  ,("M-w", spawn "firefox")
+  ,("M-w", spawn "firefox-nightly")
   ,("<XF86AudioMute>", spawn "pamixer -t")
   ,("<XF86AudioRaiseVolume>", spawn "pamixer -i 5")
   ,("<XF86AudioLowerVolume>", spawn "pamixer -d 5")
