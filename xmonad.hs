@@ -119,7 +119,11 @@ condX f g = do
 f :: Window -> X ()
 f w = do
   cn <- runQuery className w
-  spawn $ "pactl set-sink-input-mute $(pactl list sink-inputs | grep --before-context=25 -i \"" ++ cn ++ "\" | grep \"Sink Input\" | awk -F '#' '{print $2}') toggle"
+  spawn $ "pactl set-sink-input-mute $(pactl list sink-inputs | grep --before-context=25 -i \"" ++
+    (case cn of
+       "Nightly" -> "firefox"
+       _ -> cn) ++
+    "\" | grep \"Sink Input\" | awk -F '#' '{print $2}') toggle"
   -- title <- runQuery title w
   -- spawn $ "pactl set-sink-input-mute $(pactl list sink-inputs | grep --before-context=25 -i \"" ++ title ++ "\" | grep \"Sink Input\" | awk -F '#' '{print $2}') toggle"
 
