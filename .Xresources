@@ -1,14 +1,22 @@
-! set term to use 256color
-XTerm.termname: xterm-256color
-! allow UTF-8 encoding
-XTerm.vt100.locale: true
-! ensure meta behaves properly
-XTerm*metaSendsEscape: true
-! cosmetic stuff
-XTerm.vt100.scrollBar: false
+URxvt.scrollBar: false
+URxvt.font: xft:DejaVu Sans Mono:pixelsize=13:foundry=PfEd:style=Book
+! Extentions
+URxvt.perl-ext-common:	default,matcher,resize-font,url-select,keyboard-select
+URxvt.colorUL:		#4682B4
+! url-select
+URxvt.keysym.M-u:	    perl:url-select:select_next
+URxvt.url-select.launcher:  firefox-nightly
+URxvt.url-select.underline: true
+! matcher
+URxvt.url-launcher: firefox-nightly
+URxvt.matcher.button: 1
+! keyboard-select
+URxvt.keysym.M-Escape: perl:keyboard-select:activate
+URxvt.keyboard-select.clipboard: true
+! resize-font
+URxvt.resize-font.smaller:	C-minus
+URxvt.resize-font.bigger:	C-plus
 
-
-XTerm.vt100.faceName: DejaVu Sans Mono:pixelsize=13:foundry=PfEd:style=Book
 ! special
 *.foreground:   #ffffff
 *.background:   #000000
@@ -45,6 +53,7 @@ XTerm.vt100.faceName: DejaVu Sans Mono:pixelsize=13:foundry=PfEd:style=Book
 ! white
 *.color7:       #30536f
 *.color15:      #ffffff
+
 
 
 gnuplot*background:  white

@@ -24,7 +24,7 @@ import XMonad.Hooks.DynamicBars as Bars
 import XMonad.Util.Run
 
 myTerminal :: String
-myTerminal = "xterm"
+myTerminal = "urxvt"
 
 myFocusFollowsMouse :: Bool
 myFocusFollowsMouse = True
