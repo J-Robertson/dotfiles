@@ -208,7 +208,7 @@ myStartupHook = do
   spawn "~/dotfiles/monitorscript.sh"
   spawn "xset -dpms; xset s off"
   spawn "xrdb ~/.Xresources"
-  spawn "feh --bg-scale ~/Downloads/desktop.png"
+  spawn "feh --bg-scale ~/Downloads/desktop.jpg"
   spawn "xset r rate 300 40"
   setDefaultCursor xC_left_ptr
   Bars.dynStatusBarStartup xmobarCreator xmobarDestroyer
