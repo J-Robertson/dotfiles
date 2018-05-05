@@ -203,6 +203,7 @@ myPP = def
 
 myStartupHook :: X ()
 myStartupHook = do
+  spawn "wmname XMonad"
   spawn "xrandr --auto"
   spawn "~/dotfiles/monitorscript.sh"
   spawn "xset -dpms; xset s off"
