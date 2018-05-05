@@ -13,47 +13,45 @@ URxvt.matcher.button: 1
 ! keyboard-select
 URxvt.keysym.M-Escape: perl:keyboard-select:activate
 URxvt.keyboard-select.clipboard: true
-! resize-font
-URxvt.resize-font.smaller:	C-minus
-URxvt.resize-font.bigger:	C-plus
+! allow control + shift keybinds to work
+URxvt.iso14755: false
+URxvt.iso14755_2: false
 
-! special
-*.foreground:   #ffffff
-*.background:   #000000
-*.cursorColor:  #ffffff
-
-! black
-*.color0:       #000000
-*.color8:       #363636
-
-! red
-*.color1:       #d40000
-*.color9:       #ff2222
-
-! green
-*.color2:       #007900
-*.color10:      #00aa00
-
-! yellow
-*.color3:       #cf4216
-*.color11:      #ff4500
-
-! blue
-*.color4:       #005f87
-*.color12:      #00aad4
-
-! magenta
-*.color5:       #8b09b1
-*.color13:      #aa00d4
-
-! cyan
-*.color6:       #20786d
-*.color14:      #2ea596
-
-! white
-*.color7:       #30536f
-*.color15:      #ffffff
-
+*.foreground:  #cdcdcd
+*.background:  #000000
+*.cursorColor: #d0d0d0
+!
+! Black
+*.color0:      #000000
+*.color8:      #535353
+!
+! Red
+*.color1:      #d11600
+*.color9:      #f4152c
+!
+! Green
+*.color2:      #37c32c
+*.color10:     #01ea10
+!
+! Yellow
+*.color3:      #e3c421
+*.color11:     #ffee1d
+!
+! Blue
+*.color4:      #5c6bfd
+*.color12:     #8cb0f8
+!
+! Magenta
+*.color5:      #dd5be5
+*.color13:     #e056f5
+!
+! Cyan
+*.color6:      #6eb4f2
+*.color14:     #67ecff
+!
+! White
+*.color7:      #e0e0e0
+*.color15:     #f4f4f4
 
 
 gnuplot*background:  white
