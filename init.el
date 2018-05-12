@@ -18,10 +18,12 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(ansi-color-names-vector
+   ["#454545" "#cd5542" "#6aaf50" "#baba36" "#5180b3" "#ab75c3" "#68a5e9" "#bdbdb3"])
  '(company-idle-delay 0.2)
  '(custom-safe-themes
    (quote
-    ("83db918b06f0b1df1153f21c0d47250556c7ffb5b5e6906d21749f41737babb7" "3eb8dec7c15ce9eb3584ec9846175d963f838eaeccf2490f8ab3daff59862212" "db2ecce0600e3a5453532a89fc19b139664b4a3e7cbefce3aaf42b6d9b1d6214" "f5512c02e0a6887e987a816918b7a684d558716262ac7ee2dd0437ab913eaec6" default)))
+    ("36ca8f60565af20ef4f30783aa16a26d96c02df7b4e54e9900a5138fb33808da" "83db918b06f0b1df1153f21c0d47250556c7ffb5b5e6906d21749f41737babb7" "3eb8dec7c15ce9eb3584ec9846175d963f838eaeccf2490f8ab3daff59862212" "db2ecce0600e3a5453532a89fc19b139664b4a3e7cbefce3aaf42b6d9b1d6214" "f5512c02e0a6887e987a816918b7a684d558716262ac7ee2dd0437ab913eaec6" default)))
  '(erc-modules
    (quote
     (autojoin button completion fill irccontrols list match menu move-to-prompt netsplit networks noncommands readonly ring smiley stamp track)))
@@ -34,7 +36,7 @@
  '(org-bullets-bullet-list (quote ("◉")))
  '(package-selected-packages
    (quote
-    (xkcd use-package undo-tree try speed-type slime s rainbow-mode rainbow-delimiters pdf-tools paredit-everywhere ox-reveal org-bullets magit iedit htmlize haskell-mode gnu-apl-mode flycheck expand-region diminish counsel company-auctex chess arjen-grey-theme))))
+    (darkokai-theme xkcd use-package undo-tree try speed-type slime s rainbow-mode rainbow-delimiters pdf-tools paredit-everywhere ox-reveal org-bullets magit iedit htmlize haskell-mode gnu-apl-mode flycheck expand-region diminish counsel company-auctex chess arjen-grey-theme))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
