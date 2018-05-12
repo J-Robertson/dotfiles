@@ -10,17 +10,19 @@
   (tool-bar-mode -1)
   (scroll-bar-mode -1)
 
-  (unless (null window-system)
-    (use-package arjen-grey-theme
-      :ensure t
-      :config
-      (load-theme 'arjen-grey t)))
+  (use-package ample-theme
+    :ensure t
+    :config
+    (add-hook 'after-make-frame-functions
+              (lambda (frame)
+                (select-frame frame)
+                (load-theme 'ample t))))
 
   (setq ring-bell-function
-	(lambda () nil))
+        (lambda () nil))
 
   (set-face-attribute 'region nil
-		      :background "#3c4447")
+                      :background "#3c4447")
   (global-unset-key (kbd "C-z"))
   (setq-default indent-tabs-mode nil)
 #+END_SRC
@@ -82,6 +84,8 @@
     :ensure t)
   (use-package speed-type
     :ensure t)
+  (setq browse-url-browser-function 'browse-url-generic
+        browse-url-generic-program "qutebrowser")
 #+END_SRC
 * cl
   #+BEGIN_SRC emacs-lisp
@@ -123,12 +127,12 @@ exporting stuff
 	  "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
 
 #+END_SRC
-
 language stuff
 #+BEGIN_SRC emacs-lisp
   (org-babel-do-load-languages
    'org-babel-load-languages
-   '((python . t)))
+   '((python . t)
+     (emacs-lisp . t)))
 
 #+END_SRC
 * Programming
