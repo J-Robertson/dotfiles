@@ -194,13 +194,15 @@ myPP = def
 
 myStartupHook :: X ()
 myStartupHook = do
+  spawn "compton --no-fading-openclose"
   spawn "wmname XMonad"
   spawn "xrandr --auto"
   spawn "~/dotfiles/monitorscript.sh"
   spawn "xset -dpms; xset s off"
   spawn "xrdb ~/.Xresources"
-  spawn "feh --bg-scale ~/Downloads/desktop.jpg"
+  spawn "feh --bg-max ~/Downloads/buddhabrot6.png"
   spawn "xset r rate 300 40"
+  spawn "pgrep emacs || emacs --daemon"
   setDefaultCursor xC_left_ptr
   Bars.dynStatusBarStartup xmobarCreator xmobarDestroyer
 
