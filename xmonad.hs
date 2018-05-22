@@ -92,8 +92,8 @@ myKeys conf = mkKeymap conf $
   ,("M-S-z", spawn "sleep 0.1; xset dpms force off; slock; xset -dpms")
   ,("M-S-r", spawn "systemctl hibernate; slock")
   ,("M-x", io exitSuccess)
-  ,("M-e", spawn "emacs")
-  ,("M-w", spawn "firefox-nightly")
+  ,("M-e", spawn "emacsclient -c")
+  ,("M-w", spawn "qutebrowser")
   ,("<XF86AudioMute>", spawn "pamixer -t")
   ,("<XF86AudioRaiseVolume>", spawn "pamixer -i 5")
   ,("<XF86AudioLowerVolume>", spawn "pamixer -d 5")
@@ -121,9 +121,10 @@ f w = do
   cn <- runQuery className w
   spawn $ "pactl set-sink-input-mute $(pactl list sink-inputs | grep --before-context=25 -i \"" ++
     (case cn of
-       "Nightly" -> "firefox"
+       "qutebrowser" -> "chromium-browser"
        _ -> cn) ++
     "\" | grep \"Sink Input\" | awk -F '#' '{print $2}') toggle"
+  spawn $ "echo \""++cn++"\" > test.out"
   -- title <- runQuery title w
   -- spawn $ "pactl set-sink-input-mute $(pactl list sink-inputs | grep --before-context=25 -i \"" ++ title ++ "\" | grep \"Sink Input\" | awk -F '#' '{print $2}') toggle"
 
