@@ -3,7 +3,7 @@
 :set prompt λ>
 :set prompt-cont λ|
 
-setLambdabotHome "/home/joe/.local/bin"
+setLambdabotHome "/home/joe/.cabal/bin"
 :def bs        lambdabot "botsnack"
 :def pl        lambdabot "pl"
 :def unpl      lambdabot "unpl"
