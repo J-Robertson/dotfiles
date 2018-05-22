@@ -134,16 +134,6 @@ myMouseBindings XConfig {XMonad.modMask = modm} = M.fromList
   [((modm, button1), \w -> focus w >> mouseMoveWindow w >> windows W.shiftMaster)
     ,((modm, button3), \w -> focus w >> mouseResizeWindow w >> windows W.shiftMaster)]
 
-myTopBarTheme :: Theme
-myTopBarTheme = def
-  { activeColor         = "#268bd2"
-  , inactiveColor       = "#073642"
-  , activeBorderColor   = "#268bd2"
-  , inactiveBorderColor = "#073642"
-  , activeTextColor     = "#268bd2"
-  , inactiveTextColor   = "#073642"
-  , decoHeight          = 10
-  }
 
 myTabTheme :: Theme
 myTabTheme = def
