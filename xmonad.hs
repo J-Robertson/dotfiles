@@ -145,7 +145,7 @@ myTabTheme = def
   , decoHeight          = 13
   }
 
-myLayout = windowNavigation $ smartBorders mainLayout ||| topBar ||| noBorders Full
+myLayout = windowNavigation $ lessBorders Screen mainLayout ||| topBar ||| noBorders Full
   where
     topBar = named "Tabbed/Tall"
              $ noBorders
