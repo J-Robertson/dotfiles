@@ -24,6 +24,15 @@
   (global-unset-key (kbd "C-z"))
   (setq-default indent-tabs-mode nil)
 #+END_SRC
+* backups
+#+BEGIN_SRC emacs-lisp
+  (setq backup-directory-alist '(("." . "~/.saves")))
+  (setq backup-by-copying t)
+  (setq delete-old-versions t
+        kept-new-versions 3
+        kept-old-versions 1
+        version-control t)
+#+END_SRC
 * auctex
 #+BEGIN_SRC emacs-lisp
   (use-package auctex
