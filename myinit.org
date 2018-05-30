@@ -10,6 +10,9 @@
   (tool-bar-mode -1)
   (scroll-bar-mode -1)
 
+  (line-number-mode 1)
+  (column-number-mode)
+
   (use-package ample-theme
     :ensure t
     :config
