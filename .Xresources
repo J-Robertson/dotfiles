@@ -79,3 +79,5 @@ gnuplot*line5Width:  1
 gnuplot*line6Width:  1
 gnuplot*line7Width:  1
 gnuplot*line8Width:  1
+
+emacs*font: DejaVu Sans Mono:pixelsize=14:foundry=PfEd:style=Book
