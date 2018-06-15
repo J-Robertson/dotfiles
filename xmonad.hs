@@ -145,22 +145,8 @@ myTabTheme = def
   , decoHeight          = 13
   }
 
-myLayout = windowNavigation $ lessBorders Screen mainLayout ||| topBar ||| noBorders Full
+myLayout = windowNavigation $ lessBorders Screen mainLayout ||| noBorders Full
   where
-    topBar = named "Tabbed/Tall"
-             $ noBorders
-             $ addTabsAlways shrinkText myTabTheme
-             $ subLayout [] Simplest
-             $ ss 4
-             $ Tall nmaster delta ratio
-
-    -- noBar      = named "noBar Tabbed/Tall"
-    --              $ windowNavigation
-    --              $ addTabs shrinkText myTabTheme
-    --              $ subLayout [] Simplest
-    --              $ ss 0
-    --              $ Tall nmaster delta ratio
-
     mainLayout = named "Tall"
                  $ addTabs shrinkText myTabTheme
                  $ subLayout [] Simplest
@@ -232,19 +218,3 @@ myConfig = def {
         logHook            = myLogHook,
         startupHook        = myStartupHook
     }
-
-newtype SS a = SS Int deriving (Show,Read)
-
-ss :: Int -> l a -> ModifiedLayout SS l a
-ss = ModifiedLayout . SS
-
-instance LayoutModifier SS a where
-  pureModifier _ _ _ [x] = ([x], Nothing)
-  pureModifier (SS p) _ _ wrs = (map (second $ shrinkRect p) wrs, Nothing)
-  pureMess (SS px) m
-    | Just (ModifySpacing f) <- fromMessage m = Just $ SS $ max 0 $ f px
-    | otherwise = Nothing
-  modifierDescription (SS p) = "SmartSpacing " ++ show p
-
-shrinkRect :: Int -> Rectangle -> Rectangle
-shrinkRect p (Rectangle x y w h) = Rectangle (x+fi p) (y+fi p) (fi $ max 1 $ fi w-2*p) (fi $ max 1 $ fi h-2*p)
