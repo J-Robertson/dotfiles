@@ -160,8 +160,7 @@ myLayout = windowNavigation $ lessBorders Screen mainLayout ||| noBorders Full
 
 myManageHook :: ManageHook
 myManageHook = mconcat
-    [ className =? "Gimp"           --> doFloat
-    , isDialog                      --> doFloat
+    [ isDialog                      --> doFloat
     , isFullscreen                  --> doFloat]
 
 myEventHook :: Event -> X All
