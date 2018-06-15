@@ -1,6 +1,5 @@
 {-# LANGUAGE FlexibleInstances, MultiParamTypeClasses #-}
 
-import Control.Arrow (second)
 import XMonad
 import XMonad.Hooks.DynamicLog
 import qualified XMonad.StackSet as W
@@ -18,8 +17,6 @@ import XMonad.Layout.WindowNavigation
 import XMonad.Layout.Spacing
 import System.Exit
 import Data.Monoid (All)
-import XMonad.Layout.LayoutModifier
-import XMonad.Util.Font (fi)
 import XMonad.Hooks.DynamicBars as Bars
 import XMonad.Util.Run
 
