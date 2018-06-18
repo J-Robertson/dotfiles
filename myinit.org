@@ -285,3 +285,8 @@ language stuff
      (pdf-tools-install)
      (define-key pdf-view-mode-map (kbd "C-s") 'isearch-forward))
  #+END_SRC
+* lockstep
+#+BEGIN_SRC emacs-lisp
+  (use-package lockstep
+    :load-path "~/.emacs.d/lisp/")
+#+END_SRC
