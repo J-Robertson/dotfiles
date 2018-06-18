@@ -86,7 +86,7 @@ myKeys conf = mkKeymap conf $
   ,("M-S-q", spawn "systemctl poweroff")
   ,("M-q", spawn "rm .xmonad/xmonad.state; xmonad --recompile; xmonad --restart")
   ,("M-r", spawn "systemctl reboot")
-  ,("M-S-z", spawn "sleep 0.1; xset dpms force off; slock; xset -dpms")
+  ,("M-S-z", spawn "slock $(xset dpms force off)")
   ,("M-S-r", spawn "systemctl hibernate; slock")
   ,("M-x", io exitSuccess)
   ,("M-e", spawn "emacsclient -c")
@@ -107,7 +107,7 @@ myKeys conf = mkKeymap conf $
 
 condX :: X () -> X () -> X ()
 condX f g = do
-  l  <- (description . W.layout . W.workspace . W.current) <$> gets windowset
+  l  <- description . W.layout . W.workspace . W.current <$> gets windowset
   if l/="Full"
     then f
     else g
