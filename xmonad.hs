@@ -182,9 +182,11 @@ myStartupHook = do
   spawn "~/dotfiles/monitorscript.sh"
   spawn "xset -dpms; xset s off"
   spawn "xrdb ~/.Xresources"
-  spawn "feh --bg-max ~/Downloads/buddhabrot6.png"
+--  spawn "feh --bg-max ~/Downloads/buddhabrot6.png"
+  spawn "~/.fehbg"
   spawn "xset r rate 300 40"
   spawn "pgrep emacs || emacs --daemon"
+  spawn "setxkbmap -rules evdev -model pc104 -layout gb,apl -option -option grp:caps_toggle"
   setDefaultCursor xC_left_ptr
   Bars.dynStatusBarStartup xmobarCreator xmobarDestroyer
 
