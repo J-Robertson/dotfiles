@@ -4,12 +4,8 @@ URxvt.background: rgba:0000/0000/0000/8000
 URxvt.scrollBar: false
 URxvt.font: xft:DejaVu Sans Mono:pixelsize=13:foundry=PfEd:style=Book
 ! Extentions
-URxvt.perl-ext-common:	default,matcher,resize-font,url-select,keyboard-select
+URxvt.perl-ext-common:	default,matcher,resize-font,keyboard-select
 URxvt.colorUL:		#4682B4
-! url-select
-URxvt.keysym.M-u:	    perl:url-select:select_next
-URxvt.url-select.launcher:  qutebrowser
-URxvt.url-select.underline: true
 ! matcher
 URxvt.url-launcher: qutebrowser
 URxvt.matcher.button: 1
