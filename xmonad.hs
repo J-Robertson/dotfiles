@@ -15,6 +15,7 @@ import XMonad.Layout.SubLayouts
 import XMonad.Layout.NoBorders
 import XMonad.Layout.WindowNavigation
 import XMonad.Layout.Spacing
+import XMonad.Layout.StateFull (focusTracking)
 import System.Exit
 import Data.Monoid (All)
 import XMonad.Hooks.DynamicBars as Bars
@@ -86,17 +87,17 @@ myKeys conf = mkKeymap conf $
   ,("M-S-q", spawn "systemctl poweroff")
   ,("M-q", spawn "rm .xmonad/xmonad.state; xmonad --recompile; xmonad --restart")
   ,("M-r", spawn "systemctl reboot")
-  ,("M-S-z", spawn "slock $(xset dpms force off)")
+  ,("M-S-z", spawn "slock $(xset dpms force off);xset -dpms")
   ,("M-S-r", spawn "systemctl hibernate; slock")
   ,("M-x", io exitSuccess)
   ,("M-e", spawn "emacsclient -c")
-  ,("M-w", spawn "qutebrowser")
+  ,("M-w", spawn "firefox")
   ,("<XF86AudioMute>", spawn "pamixer -t")
   ,("<XF86AudioRaiseVolume>", spawn "pamixer -i 5")
   ,("<XF86AudioLowerVolume>", spawn "pamixer -d 5")
   ,("<XF86MonBrightnessDown>", spawn "xbacklight -dec 5")
   ,("<XF86MonBrightnessUp>", spawn "xbacklight -inc 5")
-  ,("<XF86AudioMicMute>", spawn "pactl set-source-mute 1 toggle")
+  ,("<XF86AudioMicMute>", spawn "pactl set-source-mute 4 toggle")
   ,("M-m", withFocused f)]
   ++
   [("M" ++ mask ++ tag, windows $ f tag)
@@ -120,8 +121,7 @@ f w = do
     (case cn of
        "qutebrowser" -> "chromium-browser"
        _ -> cn) ++
-    "\" | grep \"Sink Input\" | awk -F '#' '{print $2}') toggle"
-  spawn $ "echo \""++cn++"\" > test.out"
+    "\" | grep \"Sink Input\" | awk -F '#' '{print $2}' | tail -1) toggle"
   -- title <- runQuery title w
   -- spawn $ "pactl set-sink-input-mute $(pactl list sink-inputs | grep --before-context=25 -i \"" ++ title ++ "\" | grep \"Sink Input\" | awk -F '#' '{print $2}') toggle"
 
@@ -145,6 +145,7 @@ myTabTheme = def
 myLayout = windowNavigation $ lessBorders Screen mainLayout ||| noBorders Full
   where
     mainLayout = named "Tall"
+                 $ focusTracking
                  $ addTabs shrinkText myTabTheme
                  $ subLayout [] Simplest
                  $ Tall nmaster delta ratio
@@ -163,6 +164,7 @@ myManageHook = mconcat
 myEventHook :: Event -> X All
 myEventHook = Bars.dynStatusBarEventHook xmobarCreator xmobarDestroyer
 
+
 myLogHook :: X ()
 myLogHook = Bars.multiPP myPP (myPP {ppCurrent = xmobarColor "#ec7373" ""})
 
@@ -176,17 +178,17 @@ myPP = def
 
 myStartupHook :: X ()
 myStartupHook = do
-  spawn "compton --no-fading-openclose"
+--  spawn "compton --no-fading-openclose"
   spawn "wmname XMonad"
   spawn "xrandr --auto"
   spawn "~/dotfiles/monitorscript.sh"
   spawn "xset -dpms; xset s off"
   spawn "xrdb ~/.Xresources"
---  spawn "feh --bg-max ~/Downloads/buddhabrot6.png"
   spawn "~/.fehbg"
+  spawn "dunst"
   spawn "xset r rate 300 40"
   spawn "pgrep emacs || emacs --daemon"
-  spawn "setxkbmap -rules evdev -model pc104 -layout gb,apl -option -option grp:caps_toggle"
+  spawn "setxkbmap -rules evdev -model pc104 -layout gb,apl -option grp:caps_toggle -option compose:prsc"
   setDefaultCursor xC_left_ptr
   Bars.dynStatusBarStartup xmobarCreator xmobarDestroyer
 

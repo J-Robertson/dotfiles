@@ -6,7 +6,7 @@ HYPHEN_INSENSITIVE="true"
 plugins=(git sudo)
 
 source $ZSH/oh-my-zsh.sh
-export PATH=$PATH:~/.cabal/bin:~/rakudo/install/bin:~/rakudo/install/share/perl6/site/bin
+export PATH=$PATH:~/.cabal/bin:~/rakudo/install/bin:~/rakudo/install/share/perl6/site/bin:~/j64-807/bin
 unalias gp
 bindkey "^[l" down-case-word
 

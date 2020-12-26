@@ -30,7 +30,7 @@
  '(hl-paren-colors '("#B9F" "#B8D" "#B7B" "#B69" "#B57" "#B45" "#B33" "#B11"))
  '(org-bullets-bullet-list '("◉"))
  '(package-selected-packages
-   '(elisp-format perl6-mode dyalog-mode xkcd use-package undo-tree try speed-type slime s rainbow-mode rainbow-delimiters pdf-tools paredit-everywhere ox-reveal org-bullets magit iedit htmlize hindent gnu-apl-mode flycheck expand-region diminish counsel company-ghci company-auctex chess ample-theme)))
+   '(typescript-mode go-mode julia-repl julia-shell julia-mode elisp-format perl6-mode dyalog-mode xkcd use-package undo-tree try speed-type slime s rainbow-mode rainbow-delimiters pdf-tools paredit-everywhere ox-reveal org-bullets magit iedit htmlize hindent gnu-apl-mode flycheck expand-region diminish counsel company-ghci company-auctex chess ample-theme)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

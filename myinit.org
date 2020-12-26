@@ -38,9 +38,8 @@
 #+END_SRC
 * auctex
 #+BEGIN_SRC emacs-lisp
-  (use-package auctex
-    :defer t
-    :ensure t
+  (use-package tex
+    :ensure auctex
     :init
     (use-package company-auctex
       :ensure t)
@@ -70,19 +69,16 @@
       "Show random xkcd."
       (interactive)
       (let* ((url "http://xkcd.com/info.0.json")
-	     (last (progn (xkcd-update-latest)
-			  xkcd-latest)))
-	(xkcd-get (random last))))
+             (last (progn (xkcd-update-latest)
+                          xkcd-latest)))
+        (xkcd-get (random last))))
     (define-key xkcd-mode-map (kbd "R") 'xkcd-rand-cache))
 
 #+END_SRC
 * Magit
 #+BEGIN_SRC emacs-lisp
     (use-package magit
-      :ensure t
-      :bind
-      ("C-x g" . magit-status))
-
+      :ensure t)
 #+END_SRC
 * misc
 #+BEGIN_SRC emacs-lisp
@@ -95,12 +91,45 @@
   (use-package speed-type
     :ensure t)
   (setq browse-url-browser-function 'browse-url-generic
-        browse-url-generic-program "qutebrowser")
+        browse-url-generic-program "firefox")
+#+END_SRC
+* mu4e
+#+BEGIN_SRC emacs-lisp
+  (require 'mu4e)
+
+  (setq mail-user-agent 'mu4e-user-agent
+        mu4e-maildir "/home/joe/.mail"
+        mu4e-get-mail-command "mbsync -a"
+        mu4e-user-mail-address-list '("joseph.robertson@durham.ac.uk" "joe.robertson321@gmail.com")
+        mu4e-use-fancy-chars t
+        mu4e-sent-messages-behavior 'delete
+        mu4e-view-show-images t)
+
+  (setq sendmail-program "/usr/bin/msmtp"
+        message-send-mail-function 'sendmail-send-it
+        user-full-name "Joe Robertson")
+
+
+
+  (setq mail-specify-envelope-from t
+        mail-envelope-from 'header)
+
+  (add-hook 'mu4e-compose-pre-hook
+            (lambda ()
+              (let ((msg mu4e-compose-parent-message)) ;; msg is shorter...
+                (if msg
+                    (setq user-mail-address
+                          (cond
+                           ((mu4e-message-contact-field-matches msg :to "joe.robertson321@gmail.com")
+                            "joe.robertson321@gmail.com")
+                           ((mu4e-message-contact-field-matches msg :to "joseph.robertson@durham.ac.uk")
+                            "nmjs35@durham.ac.uk")
+                           (t "joe.robertson321@gmail.com")))))))
 #+END_SRC
 * cl
   #+BEGIN_SRC emacs-lisp
-    (use-package cl
-      :ensure t)
+    ;; (use-package cl
+    ;;   :ensure t)
   #+END_SRC
 * org
 Visual stuff
@@ -187,6 +216,8 @@ language stuff
       (add-hook 'slime-repl-mode-hook (lambda ()
                                         (define-key slime-repl-mode-map
                                           (read-kbd-macro paredit-backward-delete-key) nil))))
+    (use-package elisp-format
+      :ensure t)
   #+END_SRC
 ** Haskell
   #+BEGIN_SRC emacs-lisp
@@ -214,6 +245,28 @@ language stuff
 ** apl
    #+BEGIN_SRC emacs-lisp
      (use-package gnu-apl-mode
+       :ensure t)
+     (use-package dyalog-mode
+       :ensure t)
+     (use-package mapl
+       :load-path "~/.emacs.d/lisp")
+     (use-package ride-mode
+       :config
+       (add-hook 'ride-mode-hook (lambda ()
+                                   (setq-local company-minimum-prefix-length 0)
+                                   (setq-local company-idle-delay 0))))
+   #+END_SRC
+** perl6
+   #+BEGIN_SRC emacs-lisp
+     (use-package perl6-mode
+       :ensure t)
+   #+END_SRC
+** julia
+   #+BEGIN_SRC emacs-lisp
+     (use-package julia-mode
+       :ensure t)
+
+     (use-package julia-repl
        :ensure t)
    #+END_SRC
 ** general
@@ -258,8 +311,8 @@ language stuff
       ("<menu>" . counsel-M-x))
     (ivy-mode 1)
     (setq ivy-re-builders-alist
-	  '((counsel-find-file . ivy--regex-fuzzy)
-	   (t . ivy--regex-plus)))
+          '((counsel-find-file . ivy--regex-fuzzy)
+           (t . ivy--regex-plus)))
     :bind
     ("C-s" . swiper)
     ("C-r" . swiper))
@@ -287,6 +340,5 @@ language stuff
  #+END_SRC
 * lockstep
 #+BEGIN_SRC emacs-lisp
-  (use-package lockstep
-    :load-path "~/.emacs.d/lisp/")
+  (use-package lockstep)
 #+END_SRC
